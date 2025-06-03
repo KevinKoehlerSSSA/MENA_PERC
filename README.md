@@ -2,4 +2,4 @@
 
 This repository contains data associated with published research of the MENA-PERC project.
 
-- Polarization and Electoral Incentives for Islamist (De-)Moderation: Evidence from Turkish Parliamentary Debates [data (.csv)](polarization_data.csv)
+- Polarization and Electoral Incentives for Islamist (De-)Moderation: Evidence from Turkish Parliamentary Debates: [data (.csv)](polarization_data.csv)
