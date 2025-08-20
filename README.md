@@ -20,3 +20,5 @@ Here is a map plotting the number of candidates per district:
 
 <img width="900" height="1500" alt="candidates_per_dist" src="https://github.com/user-attachments/assets/10508f7d-419b-439b-b02e-846ab4b25ef8" />
 
+
+
