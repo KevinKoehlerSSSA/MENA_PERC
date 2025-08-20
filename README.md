@@ -18,5 +18,5 @@ The Tunisian [Instance supérieure indépendante pour les élections (ISIE)](htt
 
 Here is a map plotting the number of candidates per district:
 
-<img width="1800" height="3000" alt="candidates_per_dist" src="https://github.com/user-attachments/assets/72b18d60-319d-4ec3-bdc5-d8b051118927" />
+<img width="900" height="1500" alt="candidates_per_dist" src="https://github.com/user-attachments/assets/10508f7d-419b-439b-b02e-846ab4b25ef8" />
 
