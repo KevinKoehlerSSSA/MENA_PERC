@@ -16,3 +16,7 @@ out geom;
 ```
 The Tunisian [Instance supérieure indépendante pour les élections (ISIE)](https://www.isie.tn/ar/%d8%a7%d9%84%d8%ae%d8%b1%d9%8a%d8%b7%d8%a9-%d8%a7%d9%84%d8%a5%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d9%8a%d8%a9-%d8%a7%d9%84%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d8%a7%d8%aa-%d8%a7%d9%84%d8%aa%d8%b4/) published PDF files containing Google Maps images of the 151 domestic districts. I used these images to compare distrcit boundaries to that of (combinations of) delegations and adjusted boundaries if necessary. Please not that given the low resolution of the images contained in the PDF files, adjusted district boundaries may not always be precise. 
 
+Here is a map plotting the number of candidates per district:
+
+![Candidates per district](cand_per_districts.png)
+
