@@ -2,8 +2,6 @@
 title: "Papers"
 ---
 
-This section lists publications and working papers related to MENA-PERC.
-
 ### Publications
 
 - Albrecht, Holger, Dina Bishara, and Kevin Koehler. 2026. "Costly Commitments in Authoritarian Regime Formation: Evidence from Tunisia." *Political Research Quarterly* (forthcoming)
