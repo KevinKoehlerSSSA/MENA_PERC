@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>MENA-PERC</title>
+<title>districts – MENA-PERC</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -79,68 +79,28 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">MENA-PERC</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
+<section id="political-elites-and-regime-change-in-the-middle-east-and-north-africa-mena-perc" class="level1">
+<h1>Political Elites and Regime Change in the Middle East and North Africa (MENA PERC)</h1>
+<p>This repository contains data associated with the MENA-PERC project.</p>
+<section id="shape-files-for-the-202223-tunisian-legislative-election-districts" class="level2">
+<h2 class="anchored" data-anchor-id="shape-files-for-the-202223-tunisian-legislative-election-districts">Shape files for the 2022/23 Tunisian legislative election districts</h2>
+<p>There were 161 districts in the 2022/23 parliamentary elections, 151 in Tunisia and 10 abroad. The 151 domestic districts were based on the 2nd-level administrative divisions (delegations, معتمديات). Some of the 264 delegations doubled as electoral districts, while others were merged with adjacent delegations to form larger constituencies. In rare cases, delegations were split into two separate electoral districts, or delegation boundaries were changed.</p>
+<p>The shape file is based on the Open Street Map polygons as obtained via <a href="https://overpass-turbo.eu/">Overpass Turbo</a> with the following query:</p>
+<pre class="overpass"><code>[out:json][timeout:60];
+{{geocodeArea:Tunisia}}-&gt;.searchArea;
+relation["boundary"="administrative"]["admin_level"="5"](area.searchArea);
+out geom;</code></pre>
+<p>The Tunisian <a href="https://www.isie.tn/ar/%d8%a7%d9%84%d8%ae%d8%b1%d9%8a%d8%b7%d8%a9-%d8%a7%d9%84%d8%a5%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d9%8a%d8%a9-%d8%a7%d9%84%d8%a7%d9%86%d8%aa%d8%ae%d8%a7%d8%a8%d8%a7%d8%aa-%d8%a7%d9%84%d8%aa%d8%b4/">Instance supérieure indépendante pour les élections (ISIE)</a> published PDF files containing Google Maps images of the 151 domestic districts. I used these images to compare distrcit boundaries to that of (combinations of) delegations and adjusted boundaries if necessary. Please not that given the low resolution of the images contained in the PDF files, adjusted district boundaries may not always be precise.</p>
+<p>Here is a map plotting the number of candidates per district:</p>
+<p><img width="900" height="1500" alt="candidates_per_dist" src="https://github.com/user-attachments/assets/10508f7d-419b-439b-b02e-846ab4b25ef8"></p>
 
 
-</header>
-
-
-<p><strong>MENA-PERC</strong> is a research project funded by an ERC Consolidator Grant (CoG 2021, Grant agreement ID 101044015) that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa with a focus on Egypt, Tunisia, and Turkey. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation.</p>
-<hr>
-<section id="about" class="level2">
-<h2 class="anchored" data-anchor-id="about">About</h2>
-<p>MENA-PERC focuses on the systematic analysis of political elites using original datasets on appointments, careers, and legislative behavior. A central goal of the project is to understand how intra-elite relations—such as cooperation, competition, and exclusion—affect political outcomes, including democratization, authoritarian consolidation, and conflict.</p>
-<p>The project integrates: - Theoretical frameworks on elite power-sharing and regime dynamics<br>
-- Legislative speech corpora and text-as-data approaches</p>
-<hr>
 </section>
-<section id="resources" class="level2">
-<h2 class="anchored" data-anchor-id="resources">Resources</h2>
-<ul>
-<li><p><a href="./data/">Data</a><br>
-Datasets on political elites and legislative behavior</p></li>
-<li><p><a href="./code/">Code</a><br>
-Data processing pipelines, text analysis scripts, and replication material</p></li>
-<li><p><a href="./papers/">Papers</a><br>
-Publications and working papers related to MENA-PERC</p></li>
-</ul>
-<hr>
-</section>
-<section id="team" class="level2">
-<h2 class="anchored" data-anchor-id="team">Team</h2>
-<ul>
-<li>Kevin Koehler — Scuola Superiore Sant’Anna<br>
-</li>
-<li>Camille Abescat — Scuola Superiore Sant’Anna</li>
-<li>Théo Blanc — Scuola Superiore Sant’Anna</li>
-<li>Gennadii Iakovlev — Scuola Superiore Sant’Anna</li>
-<li>Berker Kavasoglu — Heidelberg University</li>
-<li>Lorenzo Fruganti — Scuola Superiore Sant’Anna/Scuola Normale Superiore</li>
-<li>Julius Strunk — Scuola Superiore Sant’Anna/Scuola Normale Superiore</li>
-</ul>
-<hr>
-</section>
-<section id="contact" class="level2">
-<h2 class="anchored" data-anchor-id="contact">Contact</h2>
-<p>For questions, collaborations, or data access requests, please contact:<br>
-<a href="mailto:kevin.koehler@santannapisa.it">Kevin Koehler</a></p>
-
-
 </section>
 
 </main> <!-- /main -->

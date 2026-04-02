@@ -2,7 +2,7 @@
 title: "MENA-PERC"
 format:
   html:
-    theme: cosmo
+    theme: simplex
     toc: false
 ---
 
@@ -10,7 +10,7 @@ format:
 
 ---
 
-## 🔍 About
+## About
 
 MENA-PERC focuses on the systematic analysis of political elites using original datasets on appointments, careers, and legislative behavior. A central goal of the project is to understand how intra-elite relations—such as cooperation, competition, and exclusion—affect political outcomes, including democratization, authoritarian consolidation, and conflict.
 
@@ -20,7 +20,7 @@ The project integrates:
 
 ---
 
-## 📂 Resources
+## Resources
 
 - [Data](./data/)  
   Datasets on political elites and legislative behavior  
@@ -33,20 +33,19 @@ The project integrates:
 
 ---
 
-## 👥 Team
+## Team
 
 - Kevin Koehler — Scuola Superiore Sant'Anna   
-- Camille Abescat - Scuola Superiore Sant'Anna
-- Théo Blanc - Scuola Superiore Sant'Anna
-- Gennadii Iakovlev - Scuola Superiore Sant'Anna
-- Berker Kavasoglu - Heidelberg University
-- Lorenzo Fruganti - Scuola Superiore Sant'Anna/Scuola Normale Superiore
-- Julius Strunk - Scuola Superiore Sant'Anna/Scuola Normale Superiore
+- Camille Abescat — Scuola Superiore Sant'Anna
+- Théo Blanc — Scuola Superiore Sant'Anna
+- Gennadii Iakovlev — Scuola Superiore Sant'Anna
+- Berker Kavasoglu — Heidelberg University
+- Lorenzo Fruganti — Scuola Superiore Sant'Anna/Scuola Normale Superiore
+- Julius Strunk — Scuola Superiore Sant'Anna/Scuola Normale Superiore
 
 ---
 
-## 📬 Contact
+## Contact
 
 For questions, collaborations, or data access requests, please contact:  
-**Kevin Koehler**  
-Scuola Superiore Sant’Anna  
+[Kevin Koehler](mailto:kevin.koehler@santannapisa.it)
