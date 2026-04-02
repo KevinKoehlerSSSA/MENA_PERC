@@ -1,8 +1,8 @@
 ---
-title: "Papers"
+title: ""
 ---
 
-### Publications
+### Articles
 
 - Albrecht, Holger, Dina Bishara, and Kevin Koehler. 2026. "Costly Commitments in Authoritarian Regime Formation: Evidence from Tunisia." *Political Research Quarterly* (forthcoming)
 - Kavasoglu, Berker and Kevin Koehler. 2026. “Social Polarization and Electoral Incentives for Islamist Parties.” *Democratization*. [https://doi.org/10.1080/13510347.2026.2612725](https://doi.org/10.1080/13510347.2026.2612725)
