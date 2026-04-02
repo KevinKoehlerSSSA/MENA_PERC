@@ -6,9 +6,7 @@ format:
     toc: false
 ---
 
-## MENA-PERC
-
-*MENA-PERC** is a research project funded by an ERC Consolidator Grant (CoG 2021, Grant agreement ID 101044015) that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa with a focus on Egypt, Tunisia, and Turkey. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation.
+**MENA-PERC** is a research project funded by an ERC Consolidator Grant (CoG 2021, Grant agreement ID 101044015) that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa with a focus on Egypt, Tunisia, and Turkey. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation.
 
 ---
 
@@ -17,16 +15,15 @@ format:
 MENA-PERC focuses on the systematic analysis of political elites using original datasets on appointments, careers, and legislative behavior. A central goal of the project is to understand how intra-elite relations—such as cooperation, competition, and exclusion—affect political outcomes, including democratization, authoritarian consolidation, and conflict.
 
 The project integrates:
-- Large-scale data on political appointments and careers  
-- Legislative speech corpora and text-as-data approaches  
 - Theoretical frameworks on elite power-sharing and regime dynamics  
+- Legislative speech corpora and text-as-data approaches  
 
 ---
 
 ## 📂 Resources
 
 - [Data](./data/)  
-  Datasets on political elites, appointments, and legislative behavior  
+  Datasets on political elites and legislative behavior  
 
 - [Code](./code/)  
   Data processing pipelines, text analysis scripts, and replication material  
@@ -34,25 +31,17 @@ The project integrates:
 - [Papers](./papers/)  
   Publications and working papers related to MENA-PERC  
 
-- [Outputs](./outputs/)  
-  Figures, dashboards, and derived data products  
-
----
-
-## 📊 Key Outputs
-
-- Elite-level datasets covering multiple MENA countries  
-- Text-based measures of ideological positioning and regime support  
-- Empirical analyses of elite behavior during regime crises  
-
-(links to specific outputs can be added here)
-
 ---
 
 ## 👥 Team
 
-- Kevin Koehler — Scuola Superiore Sant’Anna  
-- (add collaborators here)
+- Kevin Koehler — Scuola Superiore Sant'Anna   
+- Camille Abescat - Scuola Superiore Sant'Anna
+- Théo Blanc - Scuola Superiore Sant'Anna
+- Gennadii Iakovlev - Scuola Superiore Sant'Anna
+- Berker Kavasoglu - Heidelberg University
+- Lorenzo Fruganti - Scuola Superiore Sant'Anna/Scuola Normale Superiore
+- Julius Strunk - Scuola Superiore Sant'Anna/Scuola Normale Superiore
 
 ---
 
