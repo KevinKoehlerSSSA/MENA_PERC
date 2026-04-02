@@ -4,6 +4,16 @@ project:
 
 website:
   title: "MENA-PERC"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: data/index.qmd
+        text: Data
+      - href: code/index.qmd
+        text: Code
+      - href: papers/index.qmd
+        text: Papers
 
 format:
   html:

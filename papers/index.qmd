@@ -1,0 +1,16 @@
+---
+title: "Papers"
+---
+
+This section lists publications and working papers related to MENA-PERC.
+
+### Publications
+
+- Albrecht, Holger, Dina Bishara, and Kevin Koehler. 2026. "Costly Commitments in Authoritarian Regime Formation: Evidence from Tunisia." *Political Research Quarterly* (forthcoming)
+- Kavasoglu, Berker and Kevin Koehler. 2026. “Social Polarization and Electoral Incentives for Islamist Parties.” *Democratization*. [https://doi.org/10.1080/13510347.2026.2612725](https://doi.org/10.1080/13510347.2026.2612725)
+- Koehler, Kevin. 2023. “Breakdown by Disengagement: Tunisia’s Transition from Representative Democracy.” *Political Research Exchange* 5(1). [https://doi.org/10.1080/2474736X.2023.2279778](https://doi.org/10.1080/2474736X.2023.2279778)
+  
+### Working papers
+
+- Koehler, Kevin, Camille Abescat, and Théo Blanc. 2026. [After Democracy: Autocratization and the Revaluation of Political Capital](files/After_Democracy.pdf)
+- Koehler, Kevin, Dina Bishara, and Holger Albrecht. 2026 [Authoritarian Legacies and Autocratic Consolidation in Tunisia](files/Authoritarian_Legacies.pdf)
