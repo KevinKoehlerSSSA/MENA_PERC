@@ -1,9 +1,10 @@
 project:
   type: website
-  output-dir: .
+  output-dir: docs
 
 website:
   title: "MENA-PERC"
+  site-url: https://KevinKoehlerSSSA.github.io/MENA_PERC/
   navbar:
     left:
       - href: index.qmd
