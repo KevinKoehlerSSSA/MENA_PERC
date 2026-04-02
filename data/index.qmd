@@ -1,11 +1,23 @@
 ---
-title: "Data"
+title: ""
+format:
+  html:
+    theme: cosmo
+    toc: false
+    css: styles.css
 ---
   
+<div style="text-align: center; margin-bottom: 2em;">
+  <img src="/MENA_PERC/images/logo.png" width="300">
+  <p style="margin-top: 0.5em; font-size: 0.7em">
+    Political Elites and Regime Change in the Middle East and North Africa
+  </p>
+</div>
+  
+
+## Data
+
 This section provides access to datasets produced within the MENA-PERC project.
-
-### Available datasets
-
 
 ### Documentation
 
