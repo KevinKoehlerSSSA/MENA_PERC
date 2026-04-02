@@ -8,7 +8,7 @@ format:
 
 ## MENA-PERC
 
-**MENA Political Elite Research Consortium (MENA-PERC)** is a research project that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation.
+*MENA-PERC** is a research project funded by an ERC Consolidator Grant (CoG 2021, Grant agreement ID 101044015) that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa with a focus on Egypt, Tunisia, and Turkey. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation.
 
 ---
 
