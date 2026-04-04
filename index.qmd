@@ -55,7 +55,7 @@ Datasets on political elites and legislative behavior
 
 <div class="g-col-4">
 
-### Code  
+### Replication  
 Data processing pipelines and replication material  
 
 [View code →](./code/)

@@ -12,7 +12,7 @@ website:
       - href: data/index.qmd
         text: Data
       - href: code/index.qmd
-        text: Code
+        text: Replication materials
       - href: papers/index.qmd
         text: Papers
 

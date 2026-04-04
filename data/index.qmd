@@ -1,5 +1,8 @@
 ---
 title: ""
+bibliography: references.bib
+reference-section-title: ""
+nocite: false
 format:
   html:
     theme: cosmo
@@ -7,21 +10,31 @@ format:
     css: styles.css
 ---
   
-<div style="text-align: center; margin-bottom: 2em;">
-  <img src="/MENA_PERC/images/logo.png" width="300">
-  <p style="margin-top: 0.5em; font-size: 0.7em">
-    Political Elites and Regime Change in the Middle East and North Africa
-  </p>
-</div>
-  
 
 ## Data
-
-This section provides access to datasets produced within the MENA-PERC project.
 
 ### 2022 Tunisia Survey
 
 - [Data (csv)](files/tunisia_survey.csv)
-- [Instrument (pdf)](files/instrument.pdf)
+- [Instrument (pdf)](files/Tunisia Survey Instrument.pdf)
 
-We use these data in 
+We use these data in Albrecht, Bishara, and Koehler ([2026](../papers/)).
+
+---
+
+### Tunisian Electoral Districts 2022/2023 Legislative Elections 
+
+<details>
+Under the 2022 electoral law, Tunisia's 161 MPs (down from 217 in 2019) were elected in single-member constituencies. 151 of these were domestic districts consisting of one or more of Tunisia's 264 delegations (see: [Décret-loi n° 2022-55, Annex A](http://www.iort.gov.tn/WD120AWP/WD120Awp.exe/CTX_6168-7-elFGBXkDWU/AfficheJORT/SYNC_-1529519249)). In most cases, the 2022 districts are either identical to individual delegations or consist of combinations of multiple delegations. In some rare cases, delegations are split across two constituencies (as in Monastir, for example), or constituency boundaries do not exactly coincide with delegation boundaries. We constructed constituency borders by combining delegations and manually correcting instances in which delegations were split based on the constituency maps [published by ISIE](https://tinyurl.com/3k7v49mj).</details>
+
+- [Shapefile](files/2022_leg.shp)
+
+We use the shape files in Koehler, Abescat, and Blanc ([2026](../papers/)).
+
+---
+
+### Corpus of Turkish Parliamentary Minutes (2002-2022) 
+
+- [Data (csv)](files/tr_corpus.csv)
+
+We use the shape files in Kavasoglu and Koehler ([2026](../papers/)).

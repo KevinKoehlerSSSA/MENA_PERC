@@ -1,0 +1,20 @@
+---
+title: ""
+format:
+  html:
+    theme: cosmo
+    toc: false
+    css: styles.css
+---
+
+## Costly Commitments (*Political Research Quarterly*)
+
+- [Online appendix](files/Appendix_costly_commitments.pdf) (.pdf)
+- [R code](files/Costly_commitments.R) (.R)
+- [Data (2022 Tunisia Survey)](files/data.csv) (.csv)
+
+## Social Polarization and Electoral Incentives for Islamist De-moderation (*Democratization*)
+
+- [Online appendix](files/Appendix_costly_commitments.pdf) (.pdf)
+- [R code](files/Costly_commitments.R) (.R)
+- [Data (Turkish Parliamentary Speech Corpus)](files/data.csv) (.csv)
