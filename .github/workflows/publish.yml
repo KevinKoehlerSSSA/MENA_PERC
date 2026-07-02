@@ -28,7 +28,10 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Render Quarto project
-        run: quarto render
+        run: |
+          quarto check
+          quarto render
+        timeout-minutes: 30
 
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
