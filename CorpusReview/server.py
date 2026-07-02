@@ -22,6 +22,11 @@ ROOT = APP_DIR.parent
 STATIC_DIR = APP_DIR / "static"
 TRANSLATION_DIR = APP_DIR / "translations"
 REVIEW_DIR = APP_DIR / "reviews"
+# Primary assignment source: the gena handoff-window extractor output.
+# Produce it with:  python3 "Python scripts/handoff_window_assignment_gena.py" --all \
+#                       --output gena_speech_assignments.csv
+# Legacy deterministic CSVs remain as a fallback when the gena CSV is absent.
+GENA_CSV = Path(os.environ.get("CORPUSREVIEW_GENA_CSV", str(ROOT / "gena_speech_assignments.csv")))
 EVENTS_CSV = ROOT / "deterministic_speech_assignments_2011_2021" / "assignment_events_2011_2021.csv"
 SPEECHES_CSV = ROOT / "deterministic_speech_assignments_2011_2021" / "speeches_deterministic_2011_2021.csv"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
@@ -29,6 +34,8 @@ DEFAULT_TRANSLATION_MODEL = "gpt-4.1-mini"
 MANIFEST_CACHE: list[dict[str, object]] | None = None
 EVENTS_CACHE: dict[str, list[dict[str, object]]] | None = None
 SPEECHES_CACHE: dict[str, list[dict[str, object]]] | None = None
+GENA_CACHE: dict[str, list[dict[str, str]]] | None = None
+CORPUS_INDEX: dict[str, Path] | None = None
 TRANSLATION_JOBS: dict[str, dict[str, object]] = {}
 TRANSLATION_LOCK = threading.Lock()
 
@@ -55,9 +62,28 @@ def json_response(handler: BaseHTTPRequestHandler, payload: object, status: int 
     handler.wfile.write(data)
 
 
+def corpus_index() -> dict[str, Path]:
+    """basename -> path for every corpus file anywhere under ROOT.
+
+    The corpus moved into TN_democratic_cleaned_clean_md/, so a flat
+    ROOT-glob no longer finds it; index recursively instead.
+    """
+    global CORPUS_INDEX
+    if CORPUS_INDEX is None:
+        CORPUS_INDEX = {
+            path.name: path
+            for path in ROOT.rglob("*_cleaned_clean.md")
+            if APP_DIR not in path.parents
+        }
+    return CORPUS_INDEX
+
+
 def safe_root_file(name: str) -> Path | None:
     if "/" in name or "\\" in name:
         return None
+    path = corpus_index().get(name)
+    if path is not None:
+        return path
     path = (ROOT / name).resolve()
     try:
         path.relative_to(ROOT)
@@ -351,12 +377,50 @@ def load_manifest() -> list[dict[str, object]]:
     return docs
 
 
+def load_gena_by_source() -> dict[str, list[dict[str, str]]]:
+    """Rows from the gena handoff-window extractor, grouped by source file."""
+    global GENA_CACHE
+    if GENA_CACHE is not None:
+        return GENA_CACHE
+
+    by_source: dict[str, list[dict[str, str]]] = {}
+    if GENA_CSV.exists():
+        with GENA_CSV.open(encoding="utf-8", newline="") as handle:
+            for row in csv.DictReader(handle):
+                by_source.setdefault(row.get("source_file", ""), []).append(row)
+    GENA_CACHE = by_source
+    return by_source
+
+
 def load_events_by_source() -> dict[str, list[dict[str, object]]]:
     global EVENTS_CACHE
     if EVENTS_CACHE is not None:
         return EVENTS_CACHE
 
     by_source: dict[str, list[dict[str, object]]] = {}
+
+    gena = load_gena_by_source()
+    if gena:
+        # One event per detected handoff cue (gena's determination).
+        for source_file, rows in gena.items():
+            for row in rows:
+                by_source.setdefault(source_file, []).append(
+                    {
+                        "line": int(row.get("evidence_line") or 0),
+                        "candidateRaw": row.get("speaker_target_raw", ""),
+                        "candidateClean": row.get("speaker_target_clean", ""),
+                        "speakerType": row.get("speaker_type", ""),
+                        "speakerRole": row.get("speaker_role", ""),
+                        "mpId": row.get("mp_id", ""),
+                        "mpNameAr": row.get("mp_name_ar", ""),
+                        "assignmentMethod": row.get("assignment_method", ""),
+                        "assignmentConfidence": row.get("assignment_confidence", ""),
+                        "evidenceText": row.get("evidence_text", ""),
+                    }
+                )
+        EVENTS_CACHE = by_source
+        return by_source
+
     if not EVENTS_CSV.exists():
         EVENTS_CACHE = by_source
         return by_source
@@ -390,6 +454,26 @@ def load_speeches_by_source() -> dict[str, list[dict[str, object]]]:
         return SPEECHES_CACHE
 
     by_source: dict[str, list[dict[str, object]]] = {}
+
+    gena = load_gena_by_source()
+    if gena:
+        for source_file, rows in gena.items():
+            for row in rows:
+                by_source.setdefault(source_file, []).append(
+                    {
+                        "startLine": int(row.get("start_line") or 0),
+                        "endLine": int(row.get("end_line") or 0),
+                        "evidenceLine": int(row.get("evidence_line") or 0),
+                        "speakerTargetClean": row.get("speaker_target_clean", ""),
+                        "speakerType": row.get("speaker_type", ""),
+                        "speakerRole": row.get("speaker_role", ""),
+                        "needsReview": row.get("needs_review", ""),
+                        "text": row.get("text", ""),
+                    }
+                )
+        SPEECHES_CACHE = by_source
+        return by_source
+
     if not SPEECHES_CSV.exists():
         SPEECHES_CACHE = by_source
         return by_source
