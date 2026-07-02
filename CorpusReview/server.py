@@ -19,6 +19,28 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 APP_DIR = Path(__file__).resolve().parent
 ROOT = APP_DIR.parent
+
+
+def load_dotenv(path: Path) -> None:
+    """Minimal .env loader (no dependency): KEY=VALUE lines, # comments.
+
+    Values already present in the environment win, so exported variables
+    still override the file.
+    """
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key, value = key.strip(), value.strip().strip("'\"")
+        if key and value:
+            os.environ.setdefault(key, value)
+
+
+load_dotenv(ROOT / ".env")
+
 STATIC_DIR = APP_DIR / "static"
 TRANSLATION_DIR = APP_DIR / "translations"
 REVIEW_DIR = APP_DIR / "reviews"
@@ -361,8 +383,7 @@ def load_manifest() -> list[dict[str, object]]:
         event_counts[source_file] = len(events)
 
     docs = []
-    for path in sorted(ROOT.glob("*_cleaned_clean.md")):
-        source_file = path.name
+    for source_file in sorted(corpus_index()):
         translation_file = paired_translation(source_file)
         docs.append(
             {

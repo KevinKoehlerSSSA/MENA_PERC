@@ -1,0 +1,12 @@
+# secrets — never commit
+.env
+
+# generated data (rebuild with: python3 "Python scripts/handoff_window_assignment_gena.py" --all --output gena_speech_assignments.csv)
+# 128MB — exceeds GitHub's 100MB file limit anyway
+gena_speech_assignments.csv
+test_corpus.csv
+
+# junk
+__pycache__/
+.DS_Store
+*.partial
