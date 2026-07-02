@@ -111,6 +111,16 @@ TFADELI = r"تفض[\u064b-\u065f\u0670\u0640]*لي" + NO_AR_LETTER_AFTER
 FALYATAFADEL = r"فليتفض[\u064b-\u065f\u0670\u0640]*ل" + NO_AR_LETTER_AFTER
 FALTATAFADEL = r"فلتتفض[\u064b-\u065f\u0670\u0640]*ل" + NO_AR_LETTER_AFTER
 TFADEL_WORDS = rf"(?:{TFADEL}|{TFADELI}|{FALYATAFADEL}|{FALTATAFADEL})"
+HONORIFIC_PATTERN = (
+    r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ|"
+    r"الاستاذة|الاستاذ)"
+)
+NAME_CAPTURE = r"(?P<name>[^،.؛:\n؟]+?)"
+NAME_CAPTURE_GREEDY = r"(?P<name>[^،.؛:\n؟]+)"
+DEFENSE_TOPIC = (
+    r"(?:الدفاع\s+عن(?:ه|ها|هما| هذا المقترح| هذا التعديل| هذا الموقف| الرأي المخالف)?|"
+    r"الدفاع|الرأي المخالف)"
+)
 
 HANDOFF_PATTERNS = [
     re.compile(
@@ -134,12 +144,44 @@ HANDOFF_PATTERNS = [
         r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ)\s+"
         r"(?P<name>[^،.؛:\n]+?)\s+" + TFADEL_WORDS
     ),
+    re.compile(
+        HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE
+        + r"\s+(?:يطلب|تطلب|طلب|طلبت)\s+نقطة\s+نظام"
+    ),
+    re.compile(
+        HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE
+        + r"\s+(?:و?س?يتولى|و?س?تتولى)\s+" + DEFENSE_TOPIC
+    ),
+    re.compile(
+        r"(?:و?يتولى|و?تتولى|وسيتولى|وستتولى|سيتولى|ستتولى)\s+"
+        r"(?:" + DEFENSE_TOPIC + r"\s+)?"
+        + HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE_GREEDY
+    ),
+    re.compile(
+        r"(?:من\s+(?:س?يدافع|يتولى\s+الدفاع|سيتولى\s+الدفاع|"
+        r"يعارض|له\s+رأي\s+معارض)|هل\s+هناك\s+رأي\s+(?:مخالف|معارض)|"
+        r"من\s+له\s+رأي\s+معارض|الرأي\s+المخالف\s+مع)"
+        r"(?:\s+عن\s+[^؟،.؛:\n]+)?[؟،.؛:\s]+"
+        + HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE_GREEDY
+    ),
+]
+
+GENERIC_HANDOFF_PATTERNS = [
+    re.compile(
+        r"(?P<name>فليتفض[\u064b-\u065f\u0670\u0640]*ل\s+من\s+يدافع\s+عن\s+هذا\s+الموقف)"
+        + NO_AR_LETTER_AFTER
+    ),
+    re.compile(
+        r"(?P<name>فليتفض[\u064b-\u065f\u0670\u0640]*ل\s+من\s+يدافع\s+عنه)"
+        + NO_AR_LETTER_AFTER
+    ),
 ]
 
 STOP_AFTER_CANDIDATE = re.compile(
     rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|خمس|ثلاث|"
     r"ست|سبع|ثماني|تسع|دقيقتان|دقيقة|دقائق|غير موجود|في نقطة|نقطة نظام|"
-    r"للدفاع|للدفاع عن|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
+    r"مع الرأي الضد|مع الرأي المخالف|بالدفاع عن|بالدفاع|للدفاع|للدفاع عن|الدفاع عن|الدفاع|"
+    r"يتولى|تتولى|سيتولى|ستتولى|يطلب|تطلب|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
 )
 
 SPEECH_OPENERS = re.compile(
@@ -423,17 +465,25 @@ def find_last_handoff_cue(text: str) -> Cue | None:
     for pattern in HANDOFF_PATTERNS:
         for match in pattern.finditer(text):
             matches.append((match.start(), match, "handoff_window"))
+    for pattern in GENERIC_HANDOFF_PATTERNS:
+        for match in pattern.finditer(text):
+            matches.append((match.start(), match, "generic_handoff"))
     if not matches:
         return None
     # Prefer the last usable cue, but skip self-referential imperative tails like
-    # "نقطة نظام تفضلي" that do not name a speaker.
+    # "نقطة نظام تفضلي" that do not name a speaker. Generic handoffs are retained
+    # only for the narrow validated form where the next speech has no named target.
     for _, match, method in sorted(matches, key=lambda item: item[0], reverse=True):
         raw = match.group("name")
         clean = clean_candidate(raw)
         clean_norm = strip_honorifics(clean)
-        if not clean or clean_norm in {"تفضلي", "تفضل", "فليتفضل", "فلتتفضل"}:
+        if not clean or clean_norm in {"تفضلي", "تفضل", "فليتفضل", "فلتتفضل", "المتحدث"}:
             continue
-        if clean_norm.startswith(("من يدافع", "من يريد الدفاع", "من سيتولي الدفاع")):
+        if "؟" in raw or "؟" in clean:
+            continue
+        if method != "generic_handoff" and clean_norm.startswith(
+            ("من يدافع", "من يريد الدفاع", "من سيتولي الدفاع", "من سيدافع")
+        ):
             continue
         if len(clean_norm) < 2:
             continue
