@@ -1,0 +1,378 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f7f4;
+  --panel: #ffffff;
+  --ink: #202124;
+  --muted: #6b6f76;
+  --border: #d9dbd2;
+  --accent: #0f766e;
+  --accent-soft: #d8f0ec;
+  --warn: #b45309;
+  --warn-soft: #fff2cc;
+  --line: #f4f5f0;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 74px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  min-width: 260px;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 720;
+}
+
+h2 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.brand span,
+.paneHeader span,
+.search span,
+.picker span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: minmax(160px, 260px) minmax(260px, 520px);
+  gap: 12px;
+  flex: 1;
+  justify-content: end;
+}
+
+.search,
+.picker {
+  display: grid;
+  gap: 5px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  padding: 5px 9px;
+}
+
+button {
+  width: auto;
+  cursor: pointer;
+}
+
+.iconButton {
+  flex: 0 0 auto;
+  border-color: #9bbfba;
+  background: var(--accent-soft);
+  color: #0f514b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.iconButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  height: calc(100vh - 75px);
+  padding: 12px;
+}
+
+.handoffs,
+.pane {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.handoffs {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.panelHeader,
+.paneHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 50px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.paneHeader div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.paneHeader span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#handoffCount {
+  min-width: 28px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #0f514b;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.handoffList {
+  overflow: auto;
+  padding: 8px;
+}
+
+.reviewTools {
+  display: grid;
+  gap: 7px;
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.selectedLine,
+#reviewStatus {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#selectedLine {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+#additionalNote {
+  min-height: 30px;
+  font-size: 13px;
+}
+
+.handoffItem {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.handoffItem:hover {
+  border-color: var(--accent);
+}
+
+.handoffMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.handoffName {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.handoffEvidence {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.handoffActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.handoffActions button {
+  min-height: 28px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.acceptButton.active {
+  border-color: #0f766e;
+  background: #d8f0ec;
+  color: #0f514b;
+}
+
+.rejectButton.active {
+  border-color: #b91c1c;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.handoffItem.accepted {
+  border-color: #0f766e;
+}
+
+.handoffItem.rejected {
+  border-color: #b91c1c;
+  opacity: 0.72;
+}
+
+.handoffItem.additional {
+  border-color: #7c3aed;
+  background: #f5f3ff;
+}
+
+.translationText,
+.rawText {
+  height: calc(100% - 51px);
+  margin: 0;
+  overflow: auto;
+  padding: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.numberedLine {
+  display: grid;
+  grid-template-columns: minmax(52px, auto) minmax(0, 1fr);
+  gap: 10px;
+  min-height: 24px;
+  padding: 2px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.025);
+}
+
+.numberedLine:nth-child(2n) {
+  background: var(--line);
+}
+
+.rawLine {
+  direction: rtl;
+}
+
+.translationLine {
+  direction: ltr;
+}
+
+.lineNo {
+  color: var(--muted);
+  direction: ltr;
+  text-align: right;
+  user-select: none;
+}
+
+.lineText {
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
+.handoffStart {
+  background: var(--warn-soft) !important;
+  box-shadow: inset -4px 0 0 var(--warn);
+}
+
+.speechStart {
+  box-shadow: inset -4px 0 0 var(--accent);
+}
+
+.additionalHandoff {
+  background: #f5f3ff !important;
+  box-shadow: inset -4px 0 0 #7c3aed;
+}
+
+.acceptedHandoff {
+  outline: 1px solid #0f766e;
+  outline-offset: -1px;
+}
+
+.rejectedHandoff {
+  opacity: 0.58;
+  text-decoration: line-through;
+}
+
+.selectedRawLine {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.emptyState {
+  padding: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .handoffs,
+  .pane {
+    min-height: 360px;
+  }
+}

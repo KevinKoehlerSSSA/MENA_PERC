@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CorpusReview</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <h1>CorpusReview</h1>
+        <span id="status">Loading corpus...</span>
+      </div>
+      <div class="controls">
+        <label class="search">
+          <span>Search</span>
+          <input id="searchInput" type="search" placeholder="Filter documents">
+        </label>
+        <label class="picker">
+          <span>Document</span>
+          <select id="documentSelect"></select>
+        </label>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="handoffs">
+        <div class="panelHeader">
+          <h2>Handoff Starts</h2>
+          <span id="handoffCount">0</span>
+        </div>
+        <div class="reviewTools">
+          <div class="selectedLine">Selected line: <span id="selectedLine">none</span></div>
+          <input id="additionalNote" type="text" placeholder="Optional note for added handoff">
+          <button id="addHandoffButton" class="iconButton" type="button">Mark Selected Line</button>
+          <span id="reviewStatus">Review not saved yet</span>
+        </div>
+        <div id="handoffList" class="handoffList"></div>
+      </aside>
+
+      <section class="pane translationPane">
+        <div class="paneHeader">
+          <div>
+            <h2>English Translation</h2>
+            <span id="translationFile"></span>
+          </div>
+          <button id="translateButton" class="iconButton" type="button">Generate</button>
+        </div>
+        <div id="translationText" class="translationText"></div>
+      </section>
+
+      <section class="pane rawPane">
+        <div class="paneHeader">
+          <div>
+            <h2>Raw Arabic</h2>
+            <span id="rawFile"></span>
+          </div>
+        </div>
+        <div id="rawText" class="rawText" dir="rtl"></div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
