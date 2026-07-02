@@ -93,6 +93,10 @@ HONORIFICS = (
     "الدكتوره",
     "دكتور",
     "دكتوره",
+    "المحترم",
+    "المحترمه",
+    "محترم",
+    "محترمه",
 )
 
 TITLE_WORDS = {
@@ -133,34 +137,99 @@ FALYATAFADEL = r"فليتفض[ً-ٰٟـ]*ل" + NO_AR_LETTER_AFTER
 FALTATAFADEL = r"فلتتفض[ً-ٰٟـ]*ل" + NO_AR_LETTER_AFTER
 TFADEL_WORDS = rf"(?:{TFADEL}|{TFADELI}|{FALYATAFADEL}|{FALTATAFADEL})"
 
+# Honorific building blocks shared by the cue patterns.  HONOR_ANY includes
+# bare (no ال) and feminine/OCR variants; LIL_HONOR is the لل-prefixed set.
+HONOR_ANY = (
+    r"(?:السيدة|السيده|السيد|النائبة|النائبه|النائب|الزميلة|الزميله|الزميل|"
+    r"الأستاذة|الأستاذ|الاستاذة|الاستاذه|الاستاذ|الدكتورة|الدكتوره|الدكتور|"
+    r"سيدتي|سيدي|سيدة|سيده|سيد|نائبة|نائب)"
+)
+LIL_HONOR = (
+    r"(?:للسيدة|للسيده|للسيد|للنائبة|للنائبه|للنائب|للزميلة|للزميله|للزميل|"
+    r"للأستاذة|للأستاذ|للاستاذة|للاستاذه|للاستاذ|للدكتورة|للدكتوره|للدكتور)"
+)
+# Chair/self-address guard: a شكرا cue naming الرئيس/الوزير is an MP addressing
+# the chair or a minister at the START of their own speech, not a handoff.
+NOT_CHAIR_OR_GOV = r"(?!الرئيس|الرئيسة|الرئيسه|رئيس|رئيسة|رئيسه|الوزير|الوزيرة|الوزيره)"
+NUM_WORD = r"(?:خمس|ثلاث|أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|اثنتا|نصف)"
+DURATION_PHRASE = rf"(?:(?:له|لها|لك|لديك|لديها)\s+)?(?:{NUM_WORD}\s+)?دق[ياـئ]?[قئ][هةا]?\S*"
+
 HANDOFF_PATTERNS = [
+    # p0: (verb +) الكلمة (+ الآن) (+ إلى) (+ لل-honorific) NAME  — incl. الكلمه OCR variant
     re.compile(
-        r"(?:الكلمة|أحيل الكلمة|أُحيل الكلمة|احيل الكلمة|نمرر الكلمة|نمر الكلمة|"
-        r"نمرّر الكلمة|نعطي الكلمة|أعطي الكلمة|اعطي الكلمة)\s+"
+        r"الكلم[ةه]\s+"
         r"(?:الآن\s+)?(?:إلى\s+|الى\s+)?"
-        r"(?:للسيدة|للسيد|للنائبة|للنائب|للزميلة|للزميل|للأستاذة|للأستاذ|"
-        r"للاستاذة|للاستاذ|ل)?\s*(?P<name>[^،.؛:\n]+)"
+        rf"(?:{LIL_HONOR}|ل)?\s*(?P<name>[^،.؛:\n]+)"
     ),
+    # p1: نقطة نظام (+ إلى/لل) NAME
     re.compile(
         r"(?:نقطة نظام)\s+(?:إلى\s+|الى\s+)?"
-        r"(?:للسيدة|للسيد|للنائبة|للنائب|للزميلة|للزميل|ل)?\s*"
+        rf"(?:{LIL_HONOR}|ل)?\s*"
         r"(?P<name>[^،.؛:\n]+)"
     ),
+    # p2: تفضل/تفضلي (+ يا) (+ honorific) NAME
     re.compile(
         TFADEL_WORDS + r"\s+(?:يا\s+)?"
-        r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ)?\s*"
+        rf"{HONOR_ANY}?\s*"
         r"(?P<name>[^،.؛:\n]+)"
     ),
+    # p3: honorific NAME (,) تفضل — comma between name and تفضل tolerated
     re.compile(
-        r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ)\s+"
-        r"(?P<name>[^،.؛:\n]+?)\s+" + TFADEL_WORDS
+        rf"{HONOR_ANY}\s+"
+        r"(?P<name>[^،.؛:\n]+?)\s*[،,]?\s+" + TFADEL_WORDS
+    ),
+    # p4: شكرا، (لل)honorific NAME (duration)? at end of line — thanks-and-call.
+    #     The comma right after شكرا distinguishes "thanks; NAME (your turn)"
+    #     from "thanks TO NAME" (previous speaker, no comma).
+    re.compile(
+        rf"شكر(?:ًا|اً|ا|ً)?\s*(?:جزيلاً|جزيلا)?\s*[،,]\s*(?:لل)?{HONOR_ANY}{NOT_CHAIR_OR_GOV}\s+"
+        rf"(?P<name>[^،.؛:\n]{{2,60}}?)\s*(?:[،,]?\s*{DURATION_PHRASE})?\s*[.؛]?\s*$",
+        re.M,
+    ),
+    # p5: يتفضل/ستتفضل/وستفضل/ليتفضل + (honorific) NAME — verb-first handoff
+    re.compile(
+        r"(?:و?س?[يت]تفض[ً-ٰٟـ]*ل|وستفض[ً-ٰٟـ]*ل|فل[يت]تفض[ً-ٰٟـ]*ل|ل[يت]تفض[ً-ٰٟـ]*ل)\s+"
+        rf"(?:الآن\s+)?(?:{HONOR_ANY}\s+)?(?P<name>[^،.؛:\n]+)"
+    ),
+    # p6: نستمع (الآن) إلى/لل + honorific NAME — honorific REQUIRED, otherwise
+    # mid-speech "لا نستمع إلى بعضنا" produces junk candidates
+    re.compile(
+        rf"(?:س?نستمع)\s+(?:الآن\s+)?(?:إلى\s+|الى\s+|الي\s+)?(?:{LIL_HONOR}|{HONOR_ANY})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p7: ننتقل/نمر (الآن) إلى + honorific NAME
+    re.compile(
+        r"(?:ننتقل|نمر|سنمر)\s+(?:الآن\s+)?(?:إلى|الى|الي)\s+"
+        rf"(?:{HONOR_ANY}|{LIL_HONOR})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p8: honorific NAME (له/لها) N دقائق — time allocation implies the floor.
+    # الرئيس blocked: "السيدة الرئيسة ... دقائق" is MPs talking ABOUT the chair.
+    re.compile(
+        rf"{HONOR_ANY}(?!الرئيس|الرئيسة|الرئيسه)\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[،,]?\s+{DURATION_PHRASE}"
+    ),
+    # p9: السؤال ... من قبل / موجه من / لل + NAME — oral-question turns
+    re.compile(
+        rf"(?:السؤال|سؤال)(?:\s+[^\s،.؛:]+){{0,4}}?\s+"
+        rf"(?:(?:من\s+قبل|موجه\s+من|وهو\s+لل|طرحه)\s*{HONOR_ANY}?|{LIL_HONOR})\s*"
+        r"(?P<name>[^،.؛:\n]+)"
+    ),
+    # p10: يدافع عن (المقترح) + honorific NAME — amendment defense
+    re.compile(
+        rf"يدافع\s+عن(?:\s+[^\s،.؛:]+){{0,4}}?\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
+    ),
+    # p11: والرأي (ال)ضد/المخالف + honorific NAME — counter-speaker
+    re.compile(
+        rf"(?:و?الرأي)\s+(?:ال)?(?:ضد|مخالف|المخالف|المعارض)\s+(?:{HONOR_ANY}|{LIL_HONOR})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p12: تفضلوا السيد NAME — polite-plural handoff (ministers, officials)
+    re.compile(
+        rf"تفضلوا\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
     ),
 ]
 
 STOP_AFTER_CANDIDATE = re.compile(
-    rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|خمس|ثلاث|"
-    r"ست|سبع|ثماني|تسع|دقيقتان|دقيقة|دقائق|غير موجود|في نقطة|نقطة نظام|"
-    r"للدفاع|للدفاع عن|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
+    rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|لك|لديك|خمس|ثلاث|"
+    r"أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|دقيقتان|دقيقتين|دقيقة|دقيقه|دقائق|غير موجود|في نقطة|نقطة نظام|"
+    r"للدفاع|للدفاع عن|لتلاوة|لتقديم|لعرض|ليقدم|لتقدم|في حدود|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
 )
 
 SPEECH_OPENERS = re.compile(
@@ -177,6 +246,20 @@ SECTION_HEADER = re.compile(r"^(?:#{1,6}\s+|(?:الباب|القسم|الفرع|
 VOTE_OR_ARTICLE = re.compile(
     r"(?:نمر إلى التصويت|نمر للتصويت|التصويت|تمت الموافقة|يعرض مباشرة على التصويت|"
     r"الفصل\s+\S+|مشروع قانون|مشروع الميزانية)"
+)
+# Boundary version: START-anchored chair formulas only.  The old behaviour
+# (searching text[:250] with VOTE_OR_ARTICLE) marked any MP speech that merely
+# MENTIONS التصويت or "الفصل N" in its opening lines as a boundary, killing the
+# capture window (~100 lost speech-opener paragraphs per 60 files, measured).
+VOTE_BOUNDARY = re.compile(
+    r"^\s*(?:نمر\s+(?:الآن\s+)?(?:إلى|الى|الي)\s+التصويت|نمر\s+للتصويت|نصوت|"
+    r"أعرض\s+على\s+التصويت|يعرض\s+(?:مباشرة\s+)?على\s+التصويت|التصويت\s+على|"
+    r"تمت\s+الموافقة|مقترح\s+التعديل|الفصل\s+\d)"
+)
+# A cue paragraph cut by a PAGE BREAK ends in a dangling connector: stitch it
+# to the next real paragraph before cue detection.
+DANGLING_END = re.compile(
+    rf"(?:الكلم[ةه]|{LIL_HONOR}|{HONOR_ANY}|إلى|الى|الي|ثم|و)\s*$"
 )
 REPORT_HEADER = re.compile(r"(?:تقرير\s+لجنة|حول\s+مشروع\s+(?:قانون|ميزانية)|أعمال\s*اللجنة)")
 
@@ -450,6 +533,31 @@ def split_paragraphs(path: Path) -> list[Paragraph]:
     return paragraphs
 
 
+def stitch_paragraphs(paragraphs: list[Paragraph]) -> list[Paragraph]:
+    """Repair page-break damage before cue detection.
+
+    When a handoff cue sits at the bottom of a PDF page, the page footer /
+    number / running header splits it from its continuation ("...الكلمة للسيد"
+    <page junk> "فلان الفلاني").  Two deterministic repairs:
+      1. drop pure-noise paragraphs (page numbers, running headers) so they
+         never separate a cue from its speech window;
+      2. if a paragraph ends in a dangling connector (الكلمة / للسيد / إلى /
+         honorific / ثم / و), merge it with the next surviving paragraph.
+    """
+    kept = [p for p in paragraphs if not is_noise_paragraph(p)]
+    out: list[Paragraph] = []
+    i = 0
+    while i < len(kept):
+        para = kept[i]
+        while i + 1 < len(kept) and DANGLING_END.search(para.text.strip()):
+            nxt = kept[i + 1]
+            para = Paragraph(para.start_line, nxt.end_line, para.text.rstrip() + " " + nxt.text.lstrip())
+            i += 1
+        out.append(para)
+        i += 1
+    return out
+
+
 def is_noise_paragraph(paragraph: Paragraph) -> bool:
     text = SPACES.sub(" ", paragraph.text).strip()
     if not text:
@@ -474,22 +582,28 @@ def is_substantive_paragraph(paragraph: Paragraph) -> bool:
 
 def find_last_handoff_cue(text: str) -> Cue | None:
     matches: list[tuple[int, re.Match[str], str]] = []
-    for pattern in HANDOFF_PATTERNS:
+    for pat_idx, pattern in enumerate(HANDOFF_PATTERNS):
         for match in pattern.finditer(text):
-            matches.append((match.start(), match, "handoff_window"))
+            matches.append((match.start(), match, f"handoff_window:p{pat_idx}"))
     if not matches:
         return None
-    # Prefer the last usable cue, but skip self-referential imperative tails like
+    # Prefer the LAST usable cue: in "thanks Sam ... the floor goes to John"
+    # paragraphs the recipient (John) is named last, so last-cue-wins resolves
+    # giver/recipient correctly.  Skip self-referential imperative tails like
     # "نقطة نظام تفضلي" that do not name a speaker.
     for _, match, method in sorted(matches, key=lambda item: item[0], reverse=True):
         raw = match.group("name")
         clean = clean_candidate(raw)
         clean_norm = strip_honorifics(clean)
-        if not clean or clean_norm in {"تفضلي", "تفضل", "فليتفضل", "فلتتفضل"}:
+        if not clean or clean_norm in {"تفضلي", "تفضل", "تفضلوا", "فليتفضل", "فلتتفضل"}:
             continue
         if clean_norm.startswith(("من يدافع", "من يريد الدفاع", "من سيتولي الدفاع")):
             continue
         if len(clean_norm) < 2:
+            continue
+        # A real name (even with a role title) is short; long tails are cue
+        # verbs firing inside running speech, not handoffs.
+        if len(clean_norm.split()) > 7:
             continue
         return Cue(raw_name=raw.strip(), clean_name=clean, start=match.start(), end=match.end(), method=method)
     return None
@@ -516,7 +630,7 @@ def is_boundary_text(text: str) -> bool:
         return True
     if REPORT_HEADER.search(text[:250]):
         return True
-    if VOTE_OR_ARTICLE.search(text[:250]):
+    if VOTE_BOUNDARY.match(text):
         return True
     if find_last_handoff_cue(text):
         return True
@@ -536,7 +650,7 @@ def block_type_for_text(text: str) -> str:
 
 def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]]) -> list[dict[str, object]]:
     period = legislature_period_for_file(meta)
-    paragraphs = split_paragraphs(path)
+    paragraphs = stitch_paragraphs(split_paragraphs(path))
     turns: list[dict[str, object]] = []
     consumed: set[int] = set()
 
@@ -604,6 +718,10 @@ def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]])
                 "speaker_target_raw": cue.raw_name,
                 "speaker_target_clean": cue.clean_name,
                 "speaker_type": match.speaker_type,
+                # For function-introduced speeches (وزير التجارة، رئيس اللجنة،
+                # المقرر...) keep the verbatim role string so a downstream LLM
+                # pass can decode role -> person (session date + gov roster).
+                "speaker_role": cue.clean_name if match.speaker_type == "office_or_role" else "",
                 "mp_id": mp.mp_id if mp else "",
                 "mp_name_ar": mp.name_ar if mp else "",
                 "mp_name_transliterated": mp.name_transliterated if mp else "",
@@ -639,6 +757,7 @@ FIELDS = [
     "speaker_target_raw",
     "speaker_target_clean",
     "speaker_type",
+    "speaker_role",
     "mp_id",
     "mp_name_ar",
     "mp_name_transliterated",
@@ -666,7 +785,7 @@ def write_csv(path: Path, rows: Iterable[dict[str, object]]) -> None:
 
 def in_scope_files() -> list[Path]:
     paths = []
-    for path in ROOT.glob("*_cleaned_clean.md"):
+    for path in ROOT.rglob("*_cleaned_clean.md"):
         meta = infer_file_meta(path)
         if meta.include:
             paths.append(path)
@@ -698,7 +817,7 @@ def build_alias_table(roster: dict[str, list[MPRecord]], out: Path = ALIAS_PATH)
     for path in files:
         meta = infer_file_meta(path)
         period = legislature_period_for_file(meta)
-        for para in split_paragraphs(path):
+        for para in stitch_paragraphs(split_paragraphs(path)):
             cue = find_last_handoff_cue(para.text)
             if cue is None:
                 continue
