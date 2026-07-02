@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MENA-PERC",
+    "section": "",
+    "text": "MENA-PERC is a research project funded by an ERC Consolidator Grant (CoG 2021, Grant agreement ID 101044015) that studies the structure, behavior, and transformation of political elites across the Middle East and North Africa with a focus on Egypt, Tunisia, and Turkey. The project combines large-scale data collection with computational text analysis to examine how elite coalitions evolve, how power is distributed within regimes, and how these dynamics shape processes of regime stability, crisis, and authoritarian transformation."
+  },
+  {
+    "objectID": "index.html#about",
+    "href": "index.html#about",
+    "title": "MENA-PERC",
+    "section": "About",
+    "text": "About\nMENA-PERC focuses on the systematic analysis of political elites using original datasets on appointments, careers, and legislative behavior. A central goal of the project is to understand how intra-elite relations—such as cooperation, competition, and exclusion—affect political outcomes, including democratization, authoritarian consolidation, and conflict.\nThe project integrates: - Theoretical frameworks on elite power-sharing and regime dynamics\n- Legislative speech corpora and text-as-data approaches"
+  },
+  {
+    "objectID": "index.html#resources",
+    "href": "index.html#resources",
+    "title": "MENA-PERC",
+    "section": "Resources",
+    "text": "Resources\n\nData\nDatasets on political elites and legislative behavior\nCode\nData processing pipelines, text analysis scripts, and replication material\nPapers\nPublications and working papers related to MENA-PERC"
+  },
+  {
+    "objectID": "index.html#team",
+    "href": "index.html#team",
+    "title": "MENA-PERC",
+    "section": "Team",
+    "text": "Team\n\nKevin Koehler — Scuola Superiore Sant’Anna\n\nCamille Abescat — Scuola Superiore Sant’Anna\nThéo Blanc — Scuola Superiore Sant’Anna\nGennadii Iakovlev — Scuola Superiore Sant’Anna\nBerker Kavasoglu — Heidelberg University\nLorenzo Fruganti — Scuola Superiore Sant’Anna/Scuola Normale Superiore\nJulius Strunk — Scuola Superiore Sant’Anna/Scuola Normale Superiore"
+  },
+  {
+    "objectID": "index.html#contact",
+    "href": "index.html#contact",
+    "title": "MENA-PERC",
+    "section": "Contact",
+    "text": "Contact\nFor questions, collaborations, or data access requests, please contact:\nKevin Koehler"
+  },
+  {
+    "objectID": "2022_districts.html",
+    "href": "2022_districts.html",
+    "title": "Political Elites and Regime Change in the Middle East and North Africa (MENA PERC)",
+    "section": "",
+    "text": "This repository contains data associated with the MENA-PERC project.\n\n\nThere were 161 districts in the 2022/23 parliamentary elections, 151 in Tunisia and 10 abroad. The 151 domestic districts were based on the 2nd-level administrative divisions (delegations, معتمديات). Some of the 264 delegations doubled as electoral districts, while others were merged with adjacent delegations to form larger constituencies. In rare cases, delegations were split into two separate electoral districts, or delegation boundaries were changed.\nThe shape file is based on the Open Street Map polygons as obtained via Overpass Turbo with the following query:\n[out:json][timeout:60];\n{{geocodeArea:Tunisia}}-&gt;.searchArea;\nrelation[\"boundary\"=\"administrative\"][\"admin_level\"=\"5\"](area.searchArea);\nout geom;\nThe Tunisian Instance supérieure indépendante pour les élections (ISIE) published PDF files containing Google Maps images of the 151 domestic districts. I used these images to compare distrcit boundaries to that of (combinations of) delegations and adjusted boundaries if necessary. Please not that given the low resolution of the images contained in the PDF files, adjusted district boundaries may not always be precise.\nHere is a map plotting the number of candidates per district:"
+  },
+  {
+    "objectID": "2022_districts.html#shape-files-for-the-202223-tunisian-legislative-election-districts",
+    "href": "2022_districts.html#shape-files-for-the-202223-tunisian-legislative-election-districts",
+    "title": "Political Elites and Regime Change in the Middle East and North Africa (MENA PERC)",
+    "section": "",
+    "text": "There were 161 districts in the 2022/23 parliamentary elections, 151 in Tunisia and 10 abroad. The 151 domestic districts were based on the 2nd-level administrative divisions (delegations, معتمديات). Some of the 264 delegations doubled as electoral districts, while others were merged with adjacent delegations to form larger constituencies. In rare cases, delegations were split into two separate electoral districts, or delegation boundaries were changed.\nThe shape file is based on the Open Street Map polygons as obtained via Overpass Turbo with the following query:\n[out:json][timeout:60];\n{{geocodeArea:Tunisia}}-&gt;.searchArea;\nrelation[\"boundary\"=\"administrative\"][\"admin_level\"=\"5\"](area.searchArea);\nout geom;\nThe Tunisian Instance supérieure indépendante pour les élections (ISIE) published PDF files containing Google Maps images of the 151 domestic districts. I used these images to compare distrcit boundaries to that of (combinations of) delegations and adjusted boundaries if necessary. Please not that given the low resolution of the images contained in the PDF files, adjusted district boundaries may not always be precise.\nHere is a map plotting the number of candidates per district:"
+  }
+]

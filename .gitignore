@@ -1,12 +1,119 @@
-# secrets — never commit
+# ============================================================
+# Secrets — never commit
+# ============================================================
 .env
+.env.*
+*.pem
+*.key
+credentials.json
+secrets.yml
 
-# generated data (rebuild with: python3 "Python scripts/handoff_window_assignment_gena.py" --all --output gena_speech_assignments.csv)
+# ============================================================
+# Generated data
+# rebuild with: python3 "Python scripts/handoff_window_assignment_gena.py" --all --output gena_speech_assignments.csv
 # 128MB — exceeds GitHub's 100MB file limit anyway
+# ============================================================
 gena_speech_assignments.csv
 test_corpus.csv
-
-# junk
-__pycache__/
-.DS_Store
 *.partial
+
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+env/
+ENV/
+.python-version
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ============================================================
+# R / RStudio
+# ============================================================
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+*_cache/
+/cache/
+*.utf8.md
+*.knit.md
+.Renviron
+rsconnect/
+
+# ============================================================
+# Quarto
+# ============================================================
+/.quarto/
+*.quarto_ipynb
+
+# ============================================================
+# macOS
+# ============================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# ============================================================
+# Windows
+# ============================================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ============================================================
+# Editors / IDEs
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ============================================================
+# Logs / temp
+# ============================================================
+*.log
+*.tmp
+*.bak
+*.old

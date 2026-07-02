@@ -1,0 +1,21 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "MENA-PERC"
+  site-url: https://KevinKoehlerSSSA.github.io/MENA_PERC/
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: data/index.qmd
+        text: Data
+      - href: code/index.qmd
+        text: Replication materials
+      - href: papers/index.qmd
+        text: Papers
+
+format:
+  html:
+    theme: simplex
