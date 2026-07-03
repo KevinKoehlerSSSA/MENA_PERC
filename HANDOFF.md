@@ -38,6 +38,10 @@ The original four patterns (الكلمة…, نقطة نظام…, تفضل + na
 - **p10** amendment defense: يدافع عن (المقترح) + honorific + name.
 - **p11** counter-speaker: والرأي ضد/المخالف + honorific + name (pairs with p10 in amendment debates).
 - **p12** تفضلوا + السيد + name — polite plural used for ministers and officials.
+- **p13/p14** يتولى/تتولى الدفاع constructions, both word orders ("ويتولى الدفاع عنه الأستاذة X", "وتتولى الأستاذة X الدفاع") — added from manual-review feedback.
+- **p15** rhetorical question then bare name at line end ("من له رأي معارض؟ السيدة سامية عبو.") — the ؟ anchor keeps it out of running speech. Added from manual-review feedback.
+
+**Manual-review incorporation (CorpusReview `reviews/`):** the human review of `2015-11-19_N_09` supplied 24 missed handoffs and 12 rejections. After the fixes above plus STOP-list additions (يطلب/تتولى/سيتولى… so "السيد X يطلب نقطة نظام" yields the bare name) and a **strict duration** requirement in p8 (numeral or possessive mandatory — kills roll-call false positives like "…لمدة عام"), all **24/24** review-marked handoffs are detected and the reviewed p8 false positive no longer fires. Corpus coverage after these changes: 80.4% / opener recall 95.3% (no regression).
 
 **Giver→recipient resolution ("Sam to John"):** unchanged principle, now correct in practice — `find_last_handoff_cue` takes the **last** usable cue in a paragraph. In "thanks Sam … the floor goes to John", John is named last, so last-cue-wins picks the recipient. With p4 added, thanks-clauses are themselves cues, but positional ordering still resolves correctly.
 

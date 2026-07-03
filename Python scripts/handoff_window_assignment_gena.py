@@ -153,6 +153,12 @@ LIL_HONOR = (
 NOT_CHAIR_OR_GOV = r"(?!الرئيس|الرئيسة|الرئيسه|رئيس|رئيسة|رئيسه|الوزير|الوزيرة|الوزيره)"
 NUM_WORD = r"(?:خمس|ثلاث|أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|اثنتا|نصف)"
 DURATION_PHRASE = rf"(?:(?:له|لها|لك|لديك|لديها)\s+)?(?:{NUM_WORD}\s+)?دق[ياـئ]?[قئ][هةا]?\S*"
+# Strict variant for p8: a possessive or a numeral is REQUIRED before the
+# minutes word.  Without it, p8 fired on bare مدة/دقيقة mentions in roll-call
+# announcements (manual review: rejected event, 2011 Tome 1 line 102).
+DURATION_STRICT = rf"(?:(?:له|لها|لك|لديك|لديها)\s+(?:{NUM_WORD}\s+)?|{NUM_WORD}\s+)دق[ياـئ]?[قئ][هةا]?\S*"
+# يتولى/تتولى الدفاع family (defense assignment verbs, both ى/ي spellings)
+TAWALLA = r"(?:و?[يت]تول[ىي]|و?س[يت]تول[ىي])"
 
 HANDOFF_PATTERNS = [
     # p0: (verb +) الكلمة (+ الآن) (+ إلى) (+ لل-honorific) NAME  — incl. الكلمه OCR variant
@@ -203,8 +209,9 @@ HANDOFF_PATTERNS = [
     ),
     # p8: honorific NAME (له/لها) N دقائق — time allocation implies the floor.
     # الرئيس blocked: "السيدة الرئيسة ... دقائق" is MPs talking ABOUT the chair.
+    # STRICT duration (numeral/possessive required) per manual-review feedback.
     re.compile(
-        rf"{HONOR_ANY}(?!الرئيس|الرئيسة|الرئيسه)\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[،,]?\s+{DURATION_PHRASE}"
+        rf"{HONOR_ANY}(?!الرئيس|الرئيسة|الرئيسه)\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[،,]?\s+{DURATION_STRICT}"
     ),
     # p9: السؤال ... من قبل / موجه من / لل + NAME — oral-question turns
     re.compile(
@@ -224,12 +231,31 @@ HANDOFF_PATTERNS = [
     re.compile(
         rf"تفضلوا\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
     ),
+    # p13: يتولى/تتولى (…) الدفاع constructions, both word orders
+    # (manual review 2015-11-19: "ويتولى الدفاع عنه الأستاذة فريدة عبيدي",
+    #  "وتتولى الأستاذة سامية عبو الدفاع عن هذا المقترح")
+    re.compile(
+        rf"{TAWALLA}\s+الدفاع\s+عن\S*\s*(?:[^\s،.؛:]+\s+){{0,3}}?{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
+    ),
+    re.compile(
+        rf"{TAWALLA}\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s+الدفاع"
+    ),
+    # p15: rhetorical question then bare name at line end —
+    # "من له رأي معارض؟ السيدة سامية عبو."  The ؟ anchor keeps this out of
+    # running speech.
+    re.compile(
+        rf"؟\s*{HONOR_ANY}\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[.؛]?\s*$",
+        re.M,
+    ),
 ]
 
 STOP_AFTER_CANDIDATE = re.compile(
     rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|لك|لديك|خمس|ثلاث|"
     r"أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|دقيقتان|دقيقتين|دقيقة|دقيقه|دقائق|غير موجود|في نقطة|نقطة نظام|"
-    r"للدفاع|للدفاع عن|لتلاوة|لتقديم|لعرض|ليقدم|لتقدم|في حدود|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
+    r"للدفاع|للدفاع عن|لتلاوة|لتقديم|لعرض|ليقدم|لتقدم|في حدود|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|"
+    # verbs that follow the name in chair announcements (manual-review fixes):
+    # "السيد X يطلب نقطة نظام" / "السيدة Y تتولى الدفاع" / "سيتولى الدفاع"
+    r"يطلب|تطلب|يتولى|يتولي|تتولى|تتولي|سيتولى|سيتولي|ستتولى|ستتولي|$)"
 )
 
 SPEECH_OPENERS = re.compile(
