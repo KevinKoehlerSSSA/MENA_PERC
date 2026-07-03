@@ -8,6 +8,13 @@ following that cue.
 
 Default run mode samples 10 in-scope files and writes `test_corpus.csv`.
 Use `--all` to process all in-scope files, or `--sample-size N`.
+
+Data-driven alias tier (no hardcoded ALIAS_RAW):
+    python3 kevin_speaker_assignment.py --build-aliases   # writes alias_table.csv
+The linker loads alias_table.csv if present; it maps a normalized cue-name
+variant to a canonical mp_id, mined from the corpus's own consistent
+resolutions (see build_alias_table()).  Regenerate it whenever the corpus
+changes; hand-review rows before trusting them for publication.
 """
 
 from __future__ import annotations
@@ -19,6 +26,7 @@ import os
 import random
 import re
 import sys
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -27,6 +35,7 @@ from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "test_corpus.csv"
+ALIAS_PATH = Path(os.environ.get("TUNISIA_ALIAS_TABLE", str(Path(__file__).resolve().parent / "alias_table.csv")))
 ROSTER_PATH = Path(
     os.environ.get(
         "TUNISIA_MP_ROSTER",
@@ -38,6 +47,18 @@ ROSTER_PATH = Path(
 YEAR_MIN = 2011
 YEAR_MAX = 2021
 
+# ---------------------------------------------------------------------------
+# Fuzzy-link thresholds.  These are not magic: they were validated against the
+# 9,669 independently chair-cue-confirmed (name -> mp_id) pairs in the
+# deterministic reference set.  Because linking is PERIOD-SCOPED (only the
+# ~200 MPs sitting in that legislature are candidates), a lower floor is safe:
+# at FUZZY_STRONG the measured precision is ~0.998 with the uniqueness margin.
+# Raise FUZZY_FLOOR toward 0.90 for fewer/higher-certainty names.
+FUZZY_STRONG = 0.90     # accept with a small uniqueness margin
+FUZZY_STRONG_MARGIN = 0.03
+FUZZY_FLOOR = 0.84      # accept only with a large uniqueness margin
+FUZZY_FLOOR_MARGIN = 0.08
+
 LEADING_DATE = re.compile(r"^(?P<year>20\d{2}|19\d{2})[-_](?P<month>\d{1,2})[-_](?P<day>\d{1,2})")
 LEADING_COMPACT_DATE = re.compile(r"^(?P<year>20\d{2}|19\d{2})(?P<month>\d{2})(?P<day>\d{2})")
 LEADING_SESSION_RANGE = re.compile(r"^(?P<start>20\d{2})-(?P<end>20\d{2})_")
@@ -47,8 +68,8 @@ BULLETIN_DATE = re.compile(
     re.I,
 )
 
-AR_DIACRITICS = re.compile(r"[\u064b-\u065f\u0670\u0640]")
-NON_AR_NUM_SPACE = re.compile(r"[^\u0600-\u06FF0-9 ]+")
+AR_DIACRITICS = re.compile(r"[ً-ٰٟـ]")
+NON_AR_NUM_SPACE = re.compile(r"[^؀-ۿ0-9 ]+")
 SPACES = re.compile(r"\s+")
 
 HONORIFICS = (
@@ -72,6 +93,10 @@ HONORIFICS = (
     "الدكتوره",
     "دكتور",
     "دكتوره",
+    "المحترم",
+    "المحترمه",
+    "محترم",
+    "محترمه",
 )
 
 TITLE_WORDS = {
@@ -105,83 +130,132 @@ OFFICE_MARKERS = re.compile(
     r"كاتب الدولة|كاتبة الدولة|مقرر|مقررة|عضو|عضوة|الحكومة|الوزارة|الفصل|الجلسة)"
 )
 
-NO_AR_LETTER_AFTER = r"(?![\u0600-\u06FF])"
-TFADEL = r"تفض[\u064b-\u065f\u0670\u0640]*ل" + NO_AR_LETTER_AFTER
-TFADELI = r"تفض[\u064b-\u065f\u0670\u0640]*لي" + NO_AR_LETTER_AFTER
-FALYATAFADEL = r"فليتفض[\u064b-\u065f\u0670\u0640]*ل" + NO_AR_LETTER_AFTER
-FALTATAFADEL = r"فلتتفض[\u064b-\u065f\u0670\u0640]*ل" + NO_AR_LETTER_AFTER
+NO_AR_LETTER_AFTER = r"(?![؀-ۿ])"
+TFADEL = r"تفض[ً-ٰٟـ]*ل" + NO_AR_LETTER_AFTER
+TFADELI = r"تفض[ً-ٰٟـ]*لي" + NO_AR_LETTER_AFTER
+FALYATAFADEL = r"فليتفض[ً-ٰٟـ]*ل" + NO_AR_LETTER_AFTER
+FALTATAFADEL = r"فلتتفض[ً-ٰٟـ]*ل" + NO_AR_LETTER_AFTER
 TFADEL_WORDS = rf"(?:{TFADEL}|{TFADELI}|{FALYATAFADEL}|{FALTATAFADEL})"
-HONORIFIC_PATTERN = (
-    r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ|"
-    r"الاستاذة|الاستاذ)"
+
+# Honorific building blocks shared by the cue patterns.  HONOR_ANY includes
+# bare (no ال) and feminine/OCR variants; LIL_HONOR is the لل-prefixed set.
+HONOR_ANY = (
+    r"(?:السيدة|السيده|السيد|النائبة|النائبه|النائب|الزميلة|الزميله|الزميل|"
+    r"الأستاذة|الأستاذ|الاستاذة|الاستاذه|الاستاذ|الدكتورة|الدكتوره|الدكتور|"
+    r"سيدتي|سيدي|سيدة|سيده|سيد|نائبة|نائب)"
 )
-NAME_CAPTURE = r"(?P<name>[^،.؛:\n؟]+?)"
-NAME_CAPTURE_GREEDY = r"(?P<name>[^،.؛:\n؟]+)"
-DEFENSE_TOPIC = (
-    r"(?:الدفاع\s+عن(?:ه|ها|هما| هذا المقترح| هذا التعديل| هذا الموقف| الرأي المخالف)?|"
-    r"الدفاع|الرأي المخالف)"
+LIL_HONOR = (
+    r"(?:للسيدة|للسيده|للسيد|للنائبة|للنائبه|للنائب|للزميلة|للزميله|للزميل|"
+    r"للأستاذة|للأستاذ|للاستاذة|للاستاذه|للاستاذ|للدكتورة|للدكتوره|للدكتور)"
 )
+# Chair/self-address guard: a شكرا cue naming الرئيس/الوزير is an MP addressing
+# the chair or a minister at the START of their own speech, not a handoff.
+NOT_CHAIR_OR_GOV = r"(?!الرئيس|الرئيسة|الرئيسه|رئيس|رئيسة|رئيسه|الوزير|الوزيرة|الوزيره)"
+NUM_WORD = r"(?:خمس|ثلاث|أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|اثنتا|نصف)"
+DURATION_PHRASE = rf"(?:(?:له|لها|لك|لديك|لديها)\s+)?(?:{NUM_WORD}\s+)?دق[ياـئ]?[قئ][هةا]?\S*"
+# Strict variant for p8: a possessive or a numeral is REQUIRED before the
+# minutes word.  Without it, p8 fired on bare مدة/دقيقة mentions in roll-call
+# announcements (manual review: rejected event, 2011 Tome 1 line 102).
+DURATION_STRICT = rf"(?:(?:له|لها|لك|لديك|لديها)\s+(?:{NUM_WORD}\s+)?|{NUM_WORD}\s+)دق[ياـئ]?[قئ][هةا]?\S*"
+# يتولى/تتولى الدفاع family (defense assignment verbs, both ى/ي spellings)
+TAWALLA = r"(?:و?[يت]تول[ىي]|و?س[يت]تول[ىي])"
 
 HANDOFF_PATTERNS = [
+    # p0: (verb +) الكلمة (+ الآن) (+ إلى) (+ لل-honorific) NAME  — incl. الكلمه OCR variant
     re.compile(
-        r"(?:الكلمة|أحيل الكلمة|أُحيل الكلمة|احيل الكلمة|نمرر الكلمة|نمر الكلمة|"
-        r"نمرّر الكلمة|نعطي الكلمة|أعطي الكلمة|اعطي الكلمة)\s+"
+        r"الكلم[ةه]\s+"
         r"(?:الآن\s+)?(?:إلى\s+|الى\s+)?"
-        r"(?:للسيدة|للسيد|للنائبة|للنائب|للزميلة|للزميل|للأستاذة|للأستاذ|"
-        r"للاستاذة|للاستاذ|ل)?\s*(?P<name>[^،.؛:\n]+)"
+        rf"(?:{LIL_HONOR}|ل)?\s*(?P<name>[^،.؛:\n]+)"
     ),
+    # p1: نقطة نظام (+ إلى/لل) NAME
     re.compile(
         r"(?:نقطة نظام)\s+(?:إلى\s+|الى\s+)?"
-        r"(?:للسيدة|للسيد|للنائبة|للنائب|للزميلة|للزميل|ل)?\s*"
+        rf"(?:{LIL_HONOR}|ل)?\s*"
         r"(?P<name>[^،.؛:\n]+)"
     ),
+    # p2: تفضل/تفضلي (+ يا) (+ honorific) NAME
     re.compile(
         TFADEL_WORDS + r"\s+(?:يا\s+)?"
-        r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ)?\s*"
+        rf"{HONOR_ANY}?\s*"
         r"(?P<name>[^،.؛:\n]+)"
     ),
+    # p3: honorific NAME (,) تفضل — comma between name and تفضل tolerated
     re.compile(
-        r"(?:السيدة|السيد|النائبة|النائب|الزميلة|الزميل|الأستاذة|الأستاذ)\s+"
-        r"(?P<name>[^،.؛:\n]+?)\s+" + TFADEL_WORDS
+        rf"{HONOR_ANY}\s+"
+        r"(?P<name>[^،.؛:\n]+?)\s*[،,]?\s+" + TFADEL_WORDS
+    ),
+    # p4: شكرا، (لل)honorific NAME (duration)? at end of line — thanks-and-call.
+    #     The comma right after شكرا distinguishes "thanks; NAME (your turn)"
+    #     from "thanks TO NAME" (previous speaker, no comma).
+    re.compile(
+        rf"شكر(?:ًا|اً|ا|ً)?\s*(?:جزيلاً|جزيلا)?\s*[،,]\s*(?:لل)?{HONOR_ANY}{NOT_CHAIR_OR_GOV}\s+"
+        rf"(?P<name>[^،.؛:\n]{{2,60}}?)\s*(?:[،,]?\s*{DURATION_PHRASE})?\s*[.؛]?\s*$",
+        re.M,
+    ),
+    # p5: يتفضل/ستتفضل/وستفضل/ليتفضل + (honorific) NAME — verb-first handoff
+    re.compile(
+        r"(?:و?س?[يت]تفض[ً-ٰٟـ]*ل|وستفض[ً-ٰٟـ]*ل|فل[يت]تفض[ً-ٰٟـ]*ل|ل[يت]تفض[ً-ٰٟـ]*ل)\s+"
+        rf"(?:الآن\s+)?(?:{HONOR_ANY}\s+)?(?P<name>[^،.؛:\n]+)"
+    ),
+    # p6: نستمع (الآن) إلى/لل + honorific NAME — honorific REQUIRED, otherwise
+    # mid-speech "لا نستمع إلى بعضنا" produces junk candidates
+    re.compile(
+        rf"(?:س?نستمع)\s+(?:الآن\s+)?(?:إلى\s+|الى\s+|الي\s+)?(?:{LIL_HONOR}|{HONOR_ANY})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p7: ننتقل/نمر (الآن) إلى + honorific NAME
+    re.compile(
+        r"(?:ننتقل|نمر|سنمر)\s+(?:الآن\s+)?(?:إلى|الى|الي)\s+"
+        rf"(?:{HONOR_ANY}|{LIL_HONOR})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p8: honorific NAME (له/لها) N دقائق — time allocation implies the floor.
+    # الرئيس blocked: "السيدة الرئيسة ... دقائق" is MPs talking ABOUT the chair.
+    # STRICT duration (numeral/possessive required) per manual-review feedback.
+    re.compile(
+        rf"{HONOR_ANY}(?!الرئيس|الرئيسة|الرئيسه)\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[،,]?\s+{DURATION_STRICT}"
+    ),
+    # p9: السؤال ... من قبل / موجه من / لل + NAME — oral-question turns
+    re.compile(
+        rf"(?:السؤال|سؤال)(?:\s+[^\s،.؛:]+){{0,4}}?\s+"
+        rf"(?:(?:من\s+قبل|موجه\s+من|وهو\s+لل|طرحه)\s*{HONOR_ANY}?|{LIL_HONOR})\s*"
+        r"(?P<name>[^،.؛:\n]+)"
+    ),
+    # p10: يدافع عن (المقترح) + honorific NAME — amendment defense
+    re.compile(
+        rf"يدافع\s+عن(?:\s+[^\s،.؛:]+){{0,4}}?\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
+    ),
+    # p11: والرأي (ال)ضد/المخالف + honorific NAME — counter-speaker
+    re.compile(
+        rf"(?:و?الرأي)\s+(?:ال)?(?:ضد|مخالف|المخالف|المعارض)\s+(?:{HONOR_ANY}|{LIL_HONOR})\s*(?P<name>[^،.؛:\n]+)"
+    ),
+    # p12: تفضلوا السيد NAME — polite-plural handoff (ministers, officials)
+    re.compile(
+        rf"تفضلوا\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
+    ),
+    # p13: يتولى/تتولى (…) الدفاع constructions, both word orders
+    # (manual review 2015-11-19: "ويتولى الدفاع عنه الأستاذة فريدة عبيدي",
+    #  "وتتولى الأستاذة سامية عبو الدفاع عن هذا المقترح")
+    re.compile(
+        rf"{TAWALLA}\s+الدفاع\s+عن\S*\s*(?:[^\s،.؛:]+\s+){{0,3}}?{HONOR_ANY}\s+(?P<name>[^،.؛:\n]+)"
     ),
     re.compile(
-        HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE
-        + r"\s+(?:يطلب|تطلب|طلب|طلبت)\s+نقطة\s+نظام"
+        rf"{TAWALLA}\s+{HONOR_ANY}\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s+الدفاع"
     ),
+    # p15: rhetorical question then bare name at line end —
+    # "من له رأي معارض؟ السيدة سامية عبو."  The ؟ anchor keeps this out of
+    # running speech.
     re.compile(
-        HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE
-        + r"\s+(?:و?س?يتولى|و?س?تتولى)\s+" + DEFENSE_TOPIC
-    ),
-    re.compile(
-        r"(?:و?يتولى|و?تتولى|وسيتولى|وستتولى|سيتولى|ستتولى)\s+"
-        r"(?:" + DEFENSE_TOPIC + r"\s+)?"
-        + HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE_GREEDY
-    ),
-    re.compile(
-        r"(?:من\s+(?:س?يدافع|يتولى\s+الدفاع|سيتولى\s+الدفاع|"
-        r"يعارض|له\s+رأي\s+معارض)|هل\s+هناك\s+رأي\s+(?:مخالف|معارض)|"
-        r"من\s+له\s+رأي\s+معارض|الرأي\s+المخالف\s+مع)"
-        r"(?:\s+عن\s+[^؟،.؛:\n]+)?[؟،.؛:\s]+"
-        + HONORIFIC_PATTERN + r"\s+" + NAME_CAPTURE_GREEDY
-    ),
-]
-
-GENERIC_HANDOFF_PATTERNS = [
-    re.compile(
-        r"(?P<name>فليتفض[\u064b-\u065f\u0670\u0640]*ل\s+من\s+يدافع\s+عن\s+هذا\s+الموقف)"
-        + NO_AR_LETTER_AFTER
-    ),
-    re.compile(
-        r"(?P<name>فليتفض[\u064b-\u065f\u0670\u0640]*ل\s+من\s+يدافع\s+عنه)"
-        + NO_AR_LETTER_AFTER
+        rf"؟\s*{HONOR_ANY}\s+(?P<name>[^،.؛:\n]{{2,60}}?)\s*[.؛]?\s*$",
+        re.M,
     ),
 ]
 
 STOP_AFTER_CANDIDATE = re.compile(
-    rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|خمس|ثلاث|"
-    r"ست|سبع|ثماني|تسع|دقيقتان|دقيقة|دقائق|غير موجود|في نقطة|نقطة نظام|"
-    r"مع الرأي الضد|مع الرأي المخالف|بالدفاع عن|بالدفاع|للدفاع|للدفاع عن|الدفاع عن|الدفاع|"
-    r"يتولى|تتولى|سيتولى|ستتولى|يطلب|تطلب|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|$)"
+    rf"\s+(?:{TFADEL}|{TFADELI}|تفضيلي|{FALYATAFADEL}|{FALTATAFADEL}|لديه|لديها|له|لها|لك|لديك|خمس|ثلاث|"
+    r"أربع|اربع|ست|سبع|ثماني|تسع|عشر|إحدى|احدى|دقيقتان|دقيقتين|دقيقة|دقيقه|دقائق|غير موجود|في نقطة|نقطة نظام|"
+    r"للدفاع|للدفاع عن|لتلاوة|لتقديم|لعرض|ليقدم|لتقدم|في حدود|ثم|لكن|قبل|بعد|نمر|نمرر|نواصل|"
+    # verbs that follow the name in chair announcements (manual-review fixes):
+    # "السيد X يطلب نقطة نظام" / "السيدة Y تتولى الدفاع" / "سيتولى الدفاع"
+    r"يطلب|تطلب|يتولى|يتولي|تتولى|تتولي|سيتولى|سيتولي|ستتولى|ستتولي|$)"
 )
 
 SPEECH_OPENERS = re.compile(
@@ -198,6 +272,20 @@ SECTION_HEADER = re.compile(r"^(?:#{1,6}\s+|(?:الباب|القسم|الفرع|
 VOTE_OR_ARTICLE = re.compile(
     r"(?:نمر إلى التصويت|نمر للتصويت|التصويت|تمت الموافقة|يعرض مباشرة على التصويت|"
     r"الفصل\s+\S+|مشروع قانون|مشروع الميزانية)"
+)
+# Boundary version: START-anchored chair formulas only.  The old behaviour
+# (searching text[:250] with VOTE_OR_ARTICLE) marked any MP speech that merely
+# MENTIONS التصويت or "الفصل N" in its opening lines as a boundary, killing the
+# capture window (~100 lost speech-opener paragraphs per 60 files, measured).
+VOTE_BOUNDARY = re.compile(
+    r"^\s*(?:نمر\s+(?:الآن\s+)?(?:إلى|الى|الي)\s+التصويت|نمر\s+للتصويت|نصوت|"
+    r"أعرض\s+على\s+التصويت|يعرض\s+(?:مباشرة\s+)?على\s+التصويت|التصويت\s+على|"
+    r"تمت\s+الموافقة|مقترح\s+التعديل|الفصل\s+\d)"
+)
+# A cue paragraph cut by a PAGE BREAK ends in a dangling connector: stitch it
+# to the next real paragraph before cue detection.
+DANGLING_END = re.compile(
+    rf"(?:الكلم[ةه]|{LIL_HONOR}|{HONOR_ANY}|إلى|الى|الي|ثم|و)\s*$"
 )
 REPORT_HEADER = re.compile(r"(?:تقرير\s+لجنة|حول\s+مشروع\s+(?:قانون|ميزانية)|أعمال\s*اللجنة)")
 
@@ -344,6 +432,25 @@ def clean_candidate(candidate: str) -> str:
     return SPACES.sub(" ", candidate).strip(" ،.؛:-")
 
 
+# ---------------------------------------------------------------------------
+# Data-driven alias table (replaces any hand-typed ALIAS_RAW).
+# alias_table.csv columns: variant_norm, mp_id, roster_name, n_occurrences, source
+_ALIASES: dict[str, str] = {}
+
+
+def load_aliases(path: Path = ALIAS_PATH) -> dict[str, str]:
+    global _ALIASES
+    _ALIASES = {}
+    if path.exists():
+        with path.open(encoding="utf-8", newline="") as handle:
+            for row in csv.DictReader(handle):
+                v = (row.get("variant_norm") or "").strip()
+                m = (row.get("mp_id") or "").strip()
+                if v and m:
+                    _ALIASES[v] = m
+    return _ALIASES
+
+
 def read_roster(path: Path) -> dict[str, list[MPRecord]]:
     by_period: dict[str, list[MPRecord]] = {}
     if not path.exists():
@@ -382,15 +489,29 @@ def link_candidate(candidate: str, period: str, roster: dict[str, list[MPRecord]
         return MatchResult("unassigned", "empty_candidate", 0.0)
 
     candidates = roster.get(period, [])
+
+    # (1) exact within-period roster name
     exact = [mp for mp in candidates if mp.name_norm == candidate_norm]
     if len(exact) == 1:
         conf = 1.0 if candidate_norm == normalize_arabic(candidate) else 0.95
         return MatchResult("mp", "exact_period_roster", conf, exact[0])
 
+    # (2) roster name fully contained in the candidate string
     contained = [mp for mp in candidates if mp.name_norm and mp.name_norm in candidate_norm]
     if len(contained) == 1:
         return MatchResult("mp", "roster_name_contained_in_candidate", 0.9, contained[0])
 
+    # (3) DATA-DRIVEN alias (mined from consistent resolutions; NOT hand-typed).
+    #     Catches hard OCR variants that no safe fuzzy threshold can reach
+    #     (e.g. 'فيصل تبني' -> 'فيصل التبيني'). Period-checked: the aliased mp_id
+    #     must actually sit in this legislature.
+    alias_mid = _ALIASES.get(candidate_norm)
+    if alias_mid:
+        hit = [mp for mp in candidates if mp.mp_id == alias_mid]
+        if len(hit) == 1:
+            return MatchResult("mp", "alias_table", 0.9, hit[0])
+
+    # (4) bounded fuzzy within the period roster (thresholds validated; see header)
     scored: list[tuple[float, MPRecord]] = []
     for mp in candidates:
         ratio = SequenceMatcher(None, candidate_norm, mp.name_norm).ratio()
@@ -400,9 +521,9 @@ def link_candidate(candidate: str, period: str, roster: dict[str, list[MPRecord]
     if scored:
         best_ratio, best_mp = scored[0]
         second = scored[1][0] if len(scored) > 1 else 0.0
-        if best_ratio >= 0.9 and best_ratio - second >= 0.03:
+        if best_ratio >= FUZZY_STRONG and best_ratio - second >= FUZZY_STRONG_MARGIN:
             return MatchResult("mp", f"fuzzy_period_roster:{best_ratio:.2f}", 0.88, best_mp)
-        if best_ratio >= 0.84 and best_ratio - second >= 0.08:
+        if best_ratio >= FUZZY_FLOOR and best_ratio - second >= FUZZY_FLOOR_MARGIN:
             return MatchResult("mp", f"fuzzy_period_roster:{best_ratio:.2f}", 0.78, best_mp)
 
     if candidate_is_office(candidate):
@@ -438,6 +559,31 @@ def split_paragraphs(path: Path) -> list[Paragraph]:
     return paragraphs
 
 
+def stitch_paragraphs(paragraphs: list[Paragraph]) -> list[Paragraph]:
+    """Repair page-break damage before cue detection.
+
+    When a handoff cue sits at the bottom of a PDF page, the page footer /
+    number / running header splits it from its continuation ("...الكلمة للسيد"
+    <page junk> "فلان الفلاني").  Two deterministic repairs:
+      1. drop pure-noise paragraphs (page numbers, running headers) so they
+         never separate a cue from its speech window;
+      2. if a paragraph ends in a dangling connector (الكلمة / للسيد / إلى /
+         honorific / ثم / و), merge it with the next surviving paragraph.
+    """
+    kept = [p for p in paragraphs if not is_noise_paragraph(p)]
+    out: list[Paragraph] = []
+    i = 0
+    while i < len(kept):
+        para = kept[i]
+        while i + 1 < len(kept) and DANGLING_END.search(para.text.strip()):
+            nxt = kept[i + 1]
+            para = Paragraph(para.start_line, nxt.end_line, para.text.rstrip() + " " + nxt.text.lstrip())
+            i += 1
+        out.append(para)
+        i += 1
+    return out
+
+
 def is_noise_paragraph(paragraph: Paragraph) -> bool:
     text = SPACES.sub(" ", paragraph.text).strip()
     if not text:
@@ -462,30 +608,28 @@ def is_substantive_paragraph(paragraph: Paragraph) -> bool:
 
 def find_last_handoff_cue(text: str) -> Cue | None:
     matches: list[tuple[int, re.Match[str], str]] = []
-    for pattern in HANDOFF_PATTERNS:
+    for pat_idx, pattern in enumerate(HANDOFF_PATTERNS):
         for match in pattern.finditer(text):
-            matches.append((match.start(), match, "handoff_window"))
-    for pattern in GENERIC_HANDOFF_PATTERNS:
-        for match in pattern.finditer(text):
-            matches.append((match.start(), match, "generic_handoff"))
+            matches.append((match.start(), match, f"handoff_window:p{pat_idx}"))
     if not matches:
         return None
-    # Prefer the last usable cue, but skip self-referential imperative tails like
-    # "نقطة نظام تفضلي" that do not name a speaker. Generic handoffs are retained
-    # only for the narrow validated form where the next speech has no named target.
+    # Prefer the LAST usable cue: in "thanks Sam ... the floor goes to John"
+    # paragraphs the recipient (John) is named last, so last-cue-wins resolves
+    # giver/recipient correctly.  Skip self-referential imperative tails like
+    # "نقطة نظام تفضلي" that do not name a speaker.
     for _, match, method in sorted(matches, key=lambda item: item[0], reverse=True):
         raw = match.group("name")
         clean = clean_candidate(raw)
         clean_norm = strip_honorifics(clean)
-        if not clean or clean_norm in {"تفضلي", "تفضل", "فليتفضل", "فلتتفضل", "المتحدث"}:
+        if not clean or clean_norm in {"تفضلي", "تفضل", "تفضلوا", "فليتفضل", "فلتتفضل"}:
             continue
-        if "؟" in raw or "؟" in clean:
-            continue
-        if method != "generic_handoff" and clean_norm.startswith(
-            ("من يدافع", "من يريد الدفاع", "من سيتولي الدفاع", "من سيدافع")
-        ):
+        if clean_norm.startswith(("من يدافع", "من يريد الدفاع", "من سيتولي الدفاع")):
             continue
         if len(clean_norm) < 2:
+            continue
+        # A real name (even with a role title) is short; long tails are cue
+        # verbs firing inside running speech, not handoffs.
+        if len(clean_norm.split()) > 7:
             continue
         return Cue(raw_name=raw.strip(), clean_name=clean, start=match.start(), end=match.end(), method=method)
     return None
@@ -512,7 +656,7 @@ def is_boundary_text(text: str) -> bool:
         return True
     if REPORT_HEADER.search(text[:250]):
         return True
-    if VOTE_OR_ARTICLE.search(text[:250]):
+    if VOTE_BOUNDARY.match(text):
         return True
     if find_last_handoff_cue(text):
         return True
@@ -532,7 +676,7 @@ def block_type_for_text(text: str) -> str:
 
 def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]]) -> list[dict[str, object]]:
     period = legislature_period_for_file(meta)
-    paragraphs = split_paragraphs(path)
+    paragraphs = stitch_paragraphs(split_paragraphs(path))
     turns: list[dict[str, object]] = []
     consumed: set[int] = set()
 
@@ -600,6 +744,10 @@ def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]])
                 "speaker_target_raw": cue.raw_name,
                 "speaker_target_clean": cue.clean_name,
                 "speaker_type": match.speaker_type,
+                # For function-introduced speeches (وزير التجارة، رئيس اللجنة،
+                # المقرر...) keep the verbatim role string so a downstream LLM
+                # pass can decode role -> person (session date + gov roster).
+                "speaker_role": cue.clean_name if match.speaker_type == "office_or_role" else "",
                 "mp_id": mp.mp_id if mp else "",
                 "mp_name_ar": mp.name_ar if mp else "",
                 "mp_name_transliterated": mp.name_transliterated if mp else "",
@@ -635,6 +783,7 @@ FIELDS = [
     "speaker_target_raw",
     "speaker_target_clean",
     "speaker_type",
+    "speaker_role",
     "mp_id",
     "mp_name_ar",
     "mp_name_transliterated",
@@ -662,11 +811,97 @@ def write_csv(path: Path, rows: Iterable[dict[str, object]]) -> None:
 
 def in_scope_files() -> list[Path]:
     paths = []
-    for path in ROOT.glob("*_cleaned_clean.md"):
+    for path in ROOT.rglob("*_cleaned_clean.md"):
         meta = infer_file_meta(path)
         if meta.include:
             paths.append(path)
     return sorted(paths)
+
+
+def build_alias_table(roster: dict[str, list[MPRecord]], out: Path = ALIAS_PATH) -> int:
+    """Mine a data-driven variant->mp_id alias table from the corpus's own
+    high-confidence resolutions — no hand-typed entries.
+
+    Method (deterministic):
+      1. Run cue extraction over ALL in-scope files with the current linker.
+      2. For every cue, record (norm cue-name -> resolved mp_id) ONLY when the
+         match is high-confidence (exact / contained / strong-fuzzy).  These are
+         the "anchors": a normalized string that the corpus itself resolves the
+         same way many times.
+      3. For each UNRESOLVED cue name, attach it to an anchor MP iff the
+         unresolved string shares a DISTINCTIVE surname token (a token owned by
+         exactly one anchored MP within that period) — this is what catches
+         'فيصل تبني' next to the anchored 'فيصل التبيني'.  A variant is written
+         only if it maps to a single MP with no competing candidate.
+    The table is advisory: review before publication.
+    """
+    files = in_scope_files()
+    anchor_votes: dict[str, Counter] = defaultdict(Counter)      # norm_name -> Counter(mp_id)
+    unresolved: Counter = Counter()                               # norm_name -> count
+    period_of_name: dict[str, str] = {}
+    # distinctive-token index per period: token -> set(mp_id) among ANCHORED MPs
+    for path in files:
+        meta = infer_file_meta(path)
+        period = legislature_period_for_file(meta)
+        for para in stitch_paragraphs(split_paragraphs(path)):
+            cue = find_last_handoff_cue(para.text)
+            if cue is None:
+                continue
+            nn = strip_honorifics(cue.clean_name)
+            if not nn or len(nn.split()) < 2 or candidate_is_office(cue.clean_name):
+                continue
+            m = link_candidate(cue.clean_name, period, roster)
+            if m.speaker_type == "mp" and m.mp and m.confidence >= 0.88:
+                anchor_votes[nn][m.mp.mp_id] += 1
+                period_of_name.setdefault(nn, period)
+            elif m.speaker_type in ("unmatched_candidate", "office_or_role"):
+                unresolved[nn] += 1
+                period_of_name.setdefault(nn, period)
+
+    # anchored names: unambiguous mp_id
+    anchored = {nn: c.most_common(1)[0][0] for nn, c in anchor_votes.items()
+                if len(c) == 1 or c.most_common(1)[0][1] >= 3 * (c.most_common(2)[1][1] if len(c) > 1 else 0 or 1)}
+    # per-period distinctive surname token -> mp_id (token owned by one anchored MP)
+    tok_owner: dict[tuple[str, str], set] = defaultdict(set)
+    id_name = {}
+    for period, recs in roster.items():
+        for mp in recs:
+            id_name[mp.mp_id] = mp.name_ar
+    for nn, mid in anchored.items():
+        per = period_of_name.get(nn, "")
+        for t in strip_honorifics(id_name.get(mid, nn)).split():
+            if len(t) >= 4:
+                tok_owner[(per, t)].add(mid)
+
+    rows = []
+    seen = set()
+    # (a) anchors themselves that aren't exact roster names -> record as aliases
+    for nn, mid in anchored.items():
+        rows.append((nn, mid, id_name.get(mid, ""), anchor_votes[nn][mid], "anchor"))
+        seen.add(nn)
+    # (b) unresolved variants attached via a distinctive shared token
+    for nn, cnt in unresolved.items():
+        if nn in seen:
+            continue
+        per = period_of_name.get(nn, "")
+        owners = set()
+        for t in nn.split():
+            if len(t) >= 4 and len(tok_owner.get((per, t), set())) == 1:
+                owners |= tok_owner[(per, t)]
+        if len(owners) == 1:
+            mid = next(iter(owners))
+            rows.append((nn, mid, id_name.get(mid, ""), cnt, "distinctive_token"))
+            seen.add(nn)
+
+    with out.open("w", encoding="utf-8", newline="") as handle:
+        w = csv.writer(handle)
+        w.writerow(["variant_norm", "mp_id", "roster_name", "n_occurrences", "source"])
+        for r in sorted(rows, key=lambda x: -x[3]):
+            w.writerow(r)
+    print(f"alias table: {len(rows)} entries "
+          f"({sum(1 for r in rows if r[4]=='anchor')} anchors, "
+          f"{sum(1 for r in rows if r[4]=='distinctive_token')} token-attached) -> {out}")
+    return len(rows)
 
 
 def main() -> None:
@@ -674,20 +909,29 @@ def main() -> None:
     parser.add_argument("--sample-size", type=int, default=10)
     parser.add_argument("--seed", type=int, default=20260702)
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--build-aliases", action="store_true",
+                        help="mine alias_table.csv from the corpus, then exit")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUT)
     args = parser.parse_args()
+
+    roster = read_roster(ROSTER_PATH)
+
+    if args.build_aliases:
+        build_alias_table(roster)
+        return
+
+    load_aliases()  # advisory data-driven aliases, if present
 
     files = in_scope_files()
     rng = random.Random(args.seed)
     if args.all:
-        selected = files
-        candidate_files = selected
+        selected = []
+        candidate_files = files
     else:
         candidate_files = files[:]
         rng.shuffle(candidate_files)
         selected = []
 
-    roster = read_roster(ROSTER_PATH)
     all_rows: list[dict[str, object]] = []
     manifest: list[dict[str, object]] = []
 
@@ -728,6 +972,7 @@ def main() -> None:
 
     print(f"selected_files={len(selected)}")
     print(f"rows={len(all_rows)}")
+    print(f"aliases_loaded={len(_ALIASES)}")
     print(f"output={output}")
     print("manifest=" + json.dumps(manifest, ensure_ascii=False))
 
