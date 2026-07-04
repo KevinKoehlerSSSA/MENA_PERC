@@ -137,6 +137,189 @@ def translation_path(source_file: str) -> Path:
     return TRANSLATION_DIR / safe_name
 
 
+def line_translation_path(source_file: str) -> Path:
+    return TRANSLATION_DIR / (source_file.removesuffix(".md") + ".lines.json")
+
+
+def load_line_translations(source_file: str) -> dict[str, str]:
+    path = line_translation_path(source_file)
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(read_text(path))
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def save_line_translations(source_file: str, translations: dict[str, str]) -> None:
+    TRANSLATION_DIR.mkdir(exist_ok=True)
+    line_translation_path(source_file).write_text(
+        json.dumps(translations, ensure_ascii=False, indent=0), encoding="utf-8"
+    )
+
+
+# Cap for on-demand range translation: keeps a single request cheap and
+# bounded, no matter how big the document is.
+RANGE_MAX_LINES = int(os.environ.get("CORPUSREVIEW_RANGE_MAX_LINES", "300"))
+
+
+def translate_lines_json(chunk: list[tuple[int, str]], model: str, api_key: str) -> dict[int, str]:
+    """Translate lines keyed by line number, JSON in / JSON out.
+
+    The numbered-plaintext format (translate_chunk) lets the model drift its
+    line numbering when OCR breaks sentences across lines — translations end
+    up attached to the wrong lines.  A JSON object with line-number keys is
+    echoed back far more reliably.
+    """
+    payload_obj = {str(number): text for number, text in chunk}
+    prompt = (
+        "Translate this excerpt of Tunisian parliamentary minutes from Arabic into clear English.\n"
+        "Input is a JSON object mapping line numbers to consecutive OCR lines; sentences may "
+        "continue across lines — translate each line's own content in place, never merge or move "
+        "content between keys.\n"
+        "Return a JSON object with EXACTLY the same keys and the English translation as each value.\n\n"
+        f"{json.dumps(payload_obj, ensure_ascii=False)}"
+    )
+    request_payload = {
+        "model": model,
+        "input": [
+            {
+                "role": "system",
+                "content": "You are a careful Arabic-to-English translator for parliamentary transcripts.",
+            },
+            {"role": "user", "content": prompt},
+        ],
+        "text": {"format": {"type": "json_object"}},
+    }
+    request = urllib.request.Request(
+        OPENAI_API_URL,
+        data=json.dumps(request_payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=180, context=make_ssl_context()) as response:
+            response_payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"OpenAI API error {error.code}: {detail}") from error
+    except urllib.error.URLError as error:
+        raise RuntimeError(f"Could not reach the OpenAI API: {error}") from error
+
+    text = extract_response_text(response_payload).strip()
+    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
+    try:
+        translated = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise RuntimeError(f"Model returned unparseable JSON: {error}") from error
+
+    result: dict[int, str] = {}
+    if isinstance(translated, dict):
+        for key, value in translated.items():
+            if str(key) in payload_obj and isinstance(value, str):
+                result[int(key)] = value.strip()
+    return result
+
+
+def split_line_paragraphs(lines: list[str]) -> list[tuple[int, int, str]]:
+    """(start_line, end_line, joined_text) for each blank-line-separated paragraph."""
+    paragraphs: list[tuple[int, int, str]] = []
+    block: list[str] = []
+    block_start = 0
+    for number, line in enumerate(lines, start=1):
+        if line.strip():
+            if not block:
+                block_start = number
+            block.append(line.strip())
+        elif block:
+            paragraphs.append((block_start, number - 1, " ".join(block)))
+            block = []
+    if block:
+        paragraphs.append((block_start, len(lines), " ".join(block)))
+    return paragraphs
+
+
+def translate_line_range(source_file: str, start: int, end: int) -> dict[str, object]:
+    """Translate ONLY the paragraphs overlapping lines start..end.
+
+    Translation is per PARAGRAPH (blank-line-separated block), keyed by the
+    paragraph's first line: OCR splits sentences mid-line, so line-by-line
+    mapping drifts — paragraph units cannot.  Cached paragraphs are never
+    re-sent and the range is clamped to RANGE_MAX_LINES, so cost stays
+    bounded per click no matter the document size.
+    """
+    source_path = valid_source(source_file)
+    if not source_path:
+        raise ValueError("Unknown source document")
+    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("OPENAI_API_KEY is not set")
+    model = os.environ.get("CORPUSREVIEW_TRANSLATION_MODEL", DEFAULT_TRANSLATION_MODEL).strip()
+
+    lines = read_text(source_path).splitlines()
+    start = max(1, int(start))
+    end = min(len(lines), int(end))
+    if end < start:
+        raise ValueError("Empty line range")
+    end = min(end, start + RANGE_MAX_LINES - 1)
+
+    cache = load_line_translations(source_file)
+    selected = [
+        paragraph for paragraph in split_line_paragraphs(lines)
+        if paragraph[1] >= start and paragraph[0] <= end
+    ]
+    pending = [
+        (par_start, par_end, text)
+        for par_start, par_end, text in selected
+        if str(par_start) not in cache
+    ]
+
+    # Split pending paragraphs into <=9000-char API chunks.
+    chunks: list[list[tuple[int, int, str]]] = []
+    chunk: list[tuple[int, int, str]] = []
+    chunk_chars = 0
+    for item in pending:
+        item_chars = len(item[2]) + 12
+        if chunk and chunk_chars + item_chars > 9000:
+            chunks.append(chunk)
+            chunk = []
+            chunk_chars = 0
+        chunk.append(item)
+        chunk_chars += item_chars
+    if chunk:
+        chunks.append(chunk)
+
+    for chunk in chunks:
+        translated = translate_lines_json(
+            [(par_start, text) for par_start, _, text in chunk], model, api_key
+        )
+        for par_start, par_end, _ in chunk:
+            text = translated.get(par_start, "")
+            if not text:
+                continue
+            cache[str(par_start)] = text
+            # mark continuation lines so they are never re-requested
+            for number in range(par_start + 1, par_end + 1):
+                cache.setdefault(str(number), "")
+        save_line_translations(source_file, cache)
+
+    if selected:
+        start = min(start, selected[0][0])
+        end = max(end, selected[-1][1])
+    return {
+        "start": start,
+        "end": end,
+        "requestedLines": len(pending),
+        "translatedTotal": sum(1 for value in cache.values() if value),
+        "lines": {number: cache.get(str(number), "") for number in range(start, end + 1)},
+        "model": model,
+    }
+
+
 def review_path(source_file: str) -> Path:
     safe_name = source_file.removesuffix(".md") + ".review.md"
     return REVIEW_DIR / safe_name
@@ -720,6 +903,7 @@ class CorpusReviewHandler(BaseHTTPRequestHandler):
                 "translationFile": translation_name,
                 "rawText": read_text(source_path),
                 "translationText": translation_text,
+                "lineTranslations": load_line_translations(name),
                 "events": load_events(name),
                 "speeches": load_speeches(name),
                 "review": load_review(name),
@@ -740,6 +924,23 @@ class CorpusReviewHandler(BaseHTTPRequestHandler):
         if parsed.path == "/api/speech-sample/translate":
             try:
                 json_response(self, start_speech_sample_translation())
+            except Exception as error:
+                json_response(self, {"error": str(error)}, 500)
+            return
+        if parsed.path == "/api/translate-range":
+            length = int(self.headers.get("Content-Length", "0"))
+            payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
+            try:
+                json_response(
+                    self,
+                    translate_line_range(
+                        str(payload.get("source", "")),
+                        int(payload.get("start", 0)),
+                        int(payload.get("end", 0)),
+                    ),
+                )
+            except ValueError as error:
+                json_response(self, {"error": str(error)}, 400)
             except Exception as error:
                 json_response(self, {"error": str(error)}, 500)
             return
@@ -790,6 +991,7 @@ class CorpusReviewHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(data)
 

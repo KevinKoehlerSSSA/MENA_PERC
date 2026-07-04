@@ -277,6 +277,7 @@ button {
 
 .translationText,
 .rawText {
+  position: relative; /* rows' offsetTop relative to pane, for scroll sync */
   height: calc(100% - 51px);
   margin: 0;
   overflow: auto;
@@ -285,6 +286,11 @@ button {
   font-size: 14px;
   line-height: 1.55;
   white-space: pre-wrap;
+}
+
+.translationLine.untranslated .lineText {
+  color: var(--muted);
+  opacity: 0.45;
 }
 
 .numberedLine {

@@ -278,11 +278,20 @@ NOISE_LINE = re.compile(
     r"##\s+|افتتاح الجلسة|استئناف الجلسة|رفع الجلسة)\s*$"
 )
 
-SECTION_HEADER = re.compile(r"^(?:#{1,6}\s+|(?:الباب|القسم|الفرع|الفصل)\s+\S+)")
+# NOTE: "الفصل" (article) citations are routinely glued to their number with no
+# space by the extractor ("الفصل6", "الفصل02") — \s* (not \s+) so these still
+# match; measured 7,657 of 9,211 "الفصل+digit" block-starts were glued.
+SECTION_HEADER = re.compile(r"^(?:#{1,6}\s+|(?:الباب|القسم|الفرع|الفصل)\s*\S+)")
 VOTE_OR_ARTICLE = re.compile(
     r"(?:نمر إلى التصويت|نمر للتصويت|التصويت|تمت الموافقة|يعرض مباشرة على التصويت|"
-    r"الفصل\s+\S+|مشروع قانون|مشروع الميزانية)"
+    r"الفصل\s*\d|مشروع قانون|مشروع الميزانية)"
 )
+# Roll-call vote tally announcement ("115 صوتا نعم مع احتفاظ5 أصوات ومعارضة10
+# أصوات"): chair reading out a vote result is never part of an MP's speech and
+# always ends the capture window. Requires digit+صوت+نعم together (not bare
+# "النتيجة", which MPs use generically ~4,900 times in ordinary speech with no
+# vote-count nearby — checked, only ~2,000 of those co-occur with a tally).
+VOTE_RESULT = re.compile(r"\d+\s*صوتا?\s*[\"”]?\s*(?:ب)?نعم")
 # Boundary version: START-anchored chair formulas only.  The old behaviour
 # (searching text[:250] with VOTE_OR_ARTICLE) marked any MP speech that merely
 # MENTIONS التصويت or "الفصل N" in its opening lines as a boundary, killing the
@@ -290,8 +299,40 @@ VOTE_OR_ARTICLE = re.compile(
 VOTE_BOUNDARY = re.compile(
     r"^\s*(?:نمر\s+(?:الآن\s+)?(?:إلى|الى|الي)\s+التصويت|نمر\s+للتصويت|نصوت|"
     r"أعرض\s+على\s+التصويت|يعرض\s+(?:مباشرة\s+)?على\s+التصويت|التصويت\s+على|"
-    r"تمت\s+الموافقة|مقترح\s+التعديل|الفصل\s+\d)"
+    r"تمت\s+الموافقة|مقترح\s+التعديل|الفصل\s*\d)"
 )
+# Session-closing formulas: "رفعت الجلسة على الساعة ..." / "(كانت الساعة ...)" /
+# "اختتمت الجلسة".  Paragraph-start anchored so a speech that merely RECALLS a
+# past adjournment mid-sentence never becomes a boundary.  These end the capture
+# window: nothing after the adjournment line belongs to the running speech
+# (what follows is back-matter or the next sitting).
+ADJOURN_BOUNDARY = re.compile(
+    r"^\s*\(?\s*(?:و?رفعت\s+الجلسة|و?كانت\s+الساعة|اختتمت\s+الجلسة|"
+    r"وبهذا\s+نختتم|رفعت\s+الجلسه)"
+)
+# Session-resumption chair formula ("تستأنف/نستأنف الجلسة..."): always a fresh
+# procedural cue, never the tail of the PREVIOUS speech window. Measured: 63
+# hits corpus-wide, median block length 61 chars (short chair announcements,
+# not substantive speech content).
+RESUME_BOUNDARY = re.compile(r"^\s*(?:است[ةأ]?نفت|تستأنف|نستأنف)\s+الجلسة")
+# Same adjournment formulas as ADJOURN_BOUNDARY but un-anchored: catches a
+# chair closing their OWN remarks with "...ونرفع الجلسة (كانت الساعة ...)" in
+# the middle of what is otherwise a real captured paragraph. Used to truncate
+# a paragraph's text at the adjournment point and hard-stop window growth,
+# instead of only blocking whichever paragraph happens to start with it.
+# Measured: 214/536 adjournment-containing turns had >300 chars of trailing
+# text incorrectly captured after the sitting had already closed.
+ADJOURN_ANYWHERE = re.compile(
+    r"\(?\s*(?:و?رفعت\s+الجلسة|و?كانت\s+الساعة|اختتمت\s+الجلسة|وبهذا\s+نختتم|رفعت\s+الجلسه)"
+)
+
+def truncate_at_adjournment(text: str) -> tuple[str, bool]:
+    m = ADJOURN_ANYWHERE.search(text)
+    if not m:
+        return text, False
+    nl = text.find("\n", m.end())
+    cut = nl if nl != -1 else len(text)
+    return text[:cut].rstrip(), True
 # A cue paragraph cut by a PAGE BREAK ends in a dangling connector: stitch it
 # to the next real paragraph before cue detection.
 DANGLING_END = re.compile(
@@ -392,25 +433,43 @@ def infer_file_meta(path: Path) -> FileMeta:
 
 
 def legislature_period_for_file(meta: FileMeta) -> str:
+    """Map a file to its legislature by DATE (roster period keys).
+
+    Chamber of Deputies 2009-10-25..2011-01  -> "2009-2011"
+    NCA (التأسيسي)      2011-11-22..2014-10  -> "2011-2014"
+    ARP I               2014-12-02..2019-11  -> "2014-2019"
+    ARP II              2019-11-13..2021-07 (suspended) -> "2019-2024"
+    ARP III             2023-03-13..         -> "2023-2027"
+    Session-range files (e.g. 2019-2020_x) belong to the legislature whose
+    term contains that parliamentary year (Oct year_start .. Jul year_end).
+    """
     name = meta.source_file
-    if name.startswith("2011_Mudawalat"):
+    if name.startswith("2011_Mudawalat") or name.startswith("2011-2014"):
         return "2011-2014"
-    year = meta.year_start
-    if not year:
+    ys = meta.year_start
+    if not ys:
         return ""
-    if year <= 2010:
+    d = meta.inferred_date or ""
+    if d:  # exact sitting date known
+        if d < "2011-02-01":
+            return "2009-2011"
+        if d < "2014-11-15":
+            return "2011-2014"
+        if d < "2019-11-13":
+            return "2014-2019"
+        if d < "2022-06-01":
+            return "2019-2024"
+        return "2023-2027"
+    # session-range only: parliamentary year Oct ys .. Jul year_end
+    if ys <= 2010:
         return "2009-2011"
-    if year <= 2013:
+    if ys <= 2013:
         return "2011-2014"
-    if year == 2019:
-        # ARP II elected Oct 2019, seated mid-November: split by month
-        month = int(meta.inferred_date[5:7]) if meta.inferred_date else 1
-        return "2019-2024" if month >= 10 else "2014-2019"
-    if year <= 2018:
+    if ys <= 2018:
         return "2014-2019"
-    if year <= 2021:
+    if ys <= 2021:
         return "2019-2024"
-    return "2023-2027"   # current ARP; roster key once a member list arrives
+    return "2023-2027"
 
 
 def normalize_arabic(text: str) -> str:
@@ -690,6 +749,12 @@ def is_boundary_text(text: str) -> bool:
         return True
     if VOTE_BOUNDARY.match(text):
         return True
+    if ADJOURN_BOUNDARY.match(text):
+        return True
+    if RESUME_BOUNDARY.match(text):
+        return True
+    if VOTE_RESULT.search(text):
+        return True
     if find_last_handoff_cue(text):
         return True
     return False
@@ -746,8 +811,10 @@ def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]])
         end_line: int | None = None
         window_strategy = "next_substantive_paragraph"
 
+        adjourned = False
         tail = paragraph.text[cue.end :].strip(" ،.؛:-\n")
         if looks_like_speech_start(tail):
+            tail, adjourned = truncate_at_adjournment(tail)
             speech_parts.append(tail)
             start_line = paragraph.start_line
             end_line = paragraph.end_line
@@ -760,18 +827,20 @@ def extract_turns(path: Path, meta: FileMeta, roster: dict[str, list[MPRecord]])
                 consumed.add(j)
                 j += 1
             if j < len(paragraphs) and not is_boundary_text(paragraphs[j].text):
-                speech_parts.append(paragraphs[j].text)
+                ptext, adjourned = truncate_at_adjournment(paragraphs[j].text)
+                speech_parts.append(ptext)
                 start_line = paragraphs[j].start_line
                 end_line = paragraphs[j].end_line
                 consumed.add(j)
                 j += 1
 
-        while speech_parts and j < len(paragraphs):
+        while not adjourned and speech_parts and j < len(paragraphs):
             next_para = paragraphs[j]
             if is_boundary_text(next_para.text):
                 break
             if is_substantive_paragraph(next_para):
-                speech_parts.append(next_para.text)
+                ptext, adjourned = truncate_at_adjournment(next_para.text)
+                speech_parts.append(ptext)
                 end_line = next_para.end_line
                 consumed.add(j)
             j += 1
@@ -864,15 +933,13 @@ def write_csv(path: Path, rows: Iterable[dict[str, object]]) -> None:
 
 def in_scope_files() -> list[Path]:
     if not CORPUS_DIR.is_dir():
-        print(f"error: corpus dir not found: {CORPUS_DIR} "
-              f"(set TUNISIA_CORPUS_DIR or run from a MENA_PERC clone)", file=sys.stderr)
-        return []
+        sys.exit(f"corpus directory not found: {CORPUS_DIR}")
     paths = []
-    for path in sorted(CORPUS_DIR.rglob("*.md")):
+    for path in CORPUS_DIR.rglob("*.md"):
         meta = infer_file_meta(path)
         if meta.include:
             paths.append(path)
-    return paths
+    return sorted(paths)
 
 
 def build_alias_table(roster: dict[str, list[MPRecord]], out: Path = ALIAS_PATH) -> int:
