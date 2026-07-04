@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 """Cue-window speaker assignment for Tunisian parliamentary minutes.
 
-This is a test implementation of a handoff-window strategy. It reads
-pre-speaker-assignment `*_cleaned_clean.md` files, detects explicit chair
-handoff cues, extracts the named candidate, and captures the speech window
-following that cue.
+This is a test implementation of a handoff-window strategy. It reads the
+pre-speaker-assignment minutes in `TN_democratic_cleaned_clean_md/`, detects
+explicit chair handoff cues, extracts the named candidate, and captures the
+speech window following that cue.
+
+All paths are repo-relative, so the script runs on any clone of MENA_PERC.
+Overridable via environment variables:
+    TUNISIA_CORPUS_DIR   corpus directory (default: <repo>/TN_democratic_cleaned_clean_md)
+    TUNISIA_MP_ROSTER    roster CSV (default: <repo>/data/Tunisian Parliamentary Dataset.csv)
+    TUNISIA_ALIAS_TABLE  alias table CSV (default: next to this script)
+    TUNISIA_YEAR_MIN / TUNISIA_YEAR_MAX   year scope (default: 2010-2025)
 
 Default run mode samples 10 in-scope files and writes `test_corpus.csv`.
 Use `--all` to process all in-scope files, or `--sample-size N`.
 
 Data-driven alias tier (no hardcoded ALIAS_RAW):
-    python3 kevin_speaker_assignment.py --build-aliases   # writes alias_table.csv
+    python3 handoff_window_assignment.py --build-aliases   # writes alias_table.csv
 The linker loads alias_table.csv if present; it maps a normalized cue-name
 variant to a canonical mp_id, mined from the corpus's own consistent
 resolutions (see build_alias_table()).  Regenerate it whenever the corpus
@@ -35,17 +42,20 @@ from typing import Iterable
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = ROOT / "test_corpus.csv"
+CORPUS_DIR = Path(os.environ.get("TUNISIA_CORPUS_DIR", str(ROOT / "TN_democratic_cleaned_clean_md")))
 ALIAS_PATH = Path(os.environ.get("TUNISIA_ALIAS_TABLE", str(Path(__file__).resolve().parent / "alias_table.csv")))
 ROSTER_PATH = Path(
     os.environ.get(
         "TUNISIA_MP_ROSTER",
-        "/Users/kevin/SSSUP Dropbox/Kevin Koehler/MENA-PERC/Publications/"
-        "Controversies/Tunisia MPs/RollCalls/Tunisian Parliamentary Dataset.csv",
+        str(ROOT / "data" / "Tunisian Parliamentary Dataset.csv"),
     )
 )
 
-YEAR_MIN = 2011
-YEAR_MAX = 2021
+# default scope covers the full repo corpus (2010-2025); narrow via env,
+# e.g. TUNISIA_YEAR_MIN=2011 TUNISIA_YEAR_MAX=2021 — files outside roster
+# periods still yield turns with role/raw-name attribution.
+YEAR_MIN = int(os.environ.get("TUNISIA_YEAR_MIN", "2010"))
+YEAR_MAX = int(os.environ.get("TUNISIA_YEAR_MAX", "2025"))
 
 # ---------------------------------------------------------------------------
 # Fuzzy-link thresholds.  These are not magic: they were validated against the
@@ -345,7 +355,7 @@ def valid_date(year: int, month: int, day: int) -> str | None:
 
 def infer_file_meta(path: Path) -> FileMeta:
     name = path.name
-    document_id = name.removesuffix("_cleaned_clean.md")
+    document_id = name.removesuffix(".md").removesuffix("_cleaned_clean")
 
     if MUD_AWALAT_2011.match(name):
         return FileMeta(name, document_id, 2011, 2014, None, True, "2011_mudawalat")
@@ -377,7 +387,7 @@ def infer_file_meta(path: Path) -> FileMeta:
             inferred_date = valid_date(year_start, int(m.group("month")), int(m.group("day")))
 
     include = bool(year_start and year_end and year_start <= YEAR_MAX and year_end >= YEAR_MIN)
-    reason = "in_scope_year" if include else "outside_2011_2021_or_unknown_date"
+    reason = "in_scope_year" if include else f"outside_{YEAR_MIN}_{YEAR_MAX}_or_unknown_date"
     return FileMeta(name, document_id, year_start, year_end, inferred_date, include, reason)
 
 
@@ -385,13 +395,22 @@ def legislature_period_for_file(meta: FileMeta) -> str:
     name = meta.source_file
     if name.startswith("2011_Mudawalat"):
         return "2011-2014"
-    if name.startswith("2020-2021") or name.startswith("2019-10"):
-        return "2019-2024"
-    if meta.year_start and 2014 <= meta.year_start <= 2019:
-        return "2014-2019"
-    if meta.year_start == 2011:
+    year = meta.year_start
+    if not year:
+        return ""
+    if year <= 2010:
+        return "2009-2011"
+    if year <= 2013:
         return "2011-2014"
-    return ""
+    if year == 2019:
+        # ARP II elected Oct 2019, seated mid-November: split by month
+        month = int(meta.inferred_date[5:7]) if meta.inferred_date else 1
+        return "2019-2024" if month >= 10 else "2014-2019"
+    if year <= 2018:
+        return "2014-2019"
+    if year <= 2021:
+        return "2019-2024"
+    return "2023-2027"   # current ARP; roster key once a member list arrives
 
 
 def normalize_arabic(text: str) -> str:
@@ -500,6 +519,19 @@ def link_candidate(candidate: str, period: str, roster: dict[str, list[MPRecord]
     contained = [mp for mp in candidates if mp.name_norm and mp.name_norm in candidate_norm]
     if len(contained) == 1:
         return MatchResult("mp", "roster_name_contained_in_candidate", 0.9, contained[0])
+
+    # (2b) the reverse direction: every candidate token inside a roster name, in
+    #      order (the chair drops middle names: 'سامية عبو' -> roster
+    #      'سامية حمودة عبو'). >=2 tokens and within-period uniqueness required.
+    ctoks = candidate_norm.split()
+    if len(ctoks) >= 2:
+        def _subseq(small: list[str], big: list[str]) -> bool:
+            it = iter(big)
+            return all(t in it for t in small)
+        sub = [mp for mp in candidates
+               if mp.name_norm and _subseq(ctoks, mp.name_norm.split())]
+        if len(sub) == 1:
+            return MatchResult("mp", "candidate_tokens_in_roster_name", 0.9, sub[0])
 
     # (3) DATA-DRIVEN alias (mined from consistent resolutions; NOT hand-typed).
     #     Catches hard OCR variants that no safe fuzzy threshold can reach
@@ -663,6 +695,25 @@ def is_boundary_text(text: str) -> bool:
     return False
 
 
+# Procedural = short, cue-dominated chair floor-management / voting mechanics /
+# quorum (attendance counts, hand-raising, adjournment proposals). Not covered by
+# VOTE_OR_ARTICLE, which tags bill/vote *text*. Word-count guarded so a real speech
+# that merely mentions a vote is never mislabelled (preserves recall — no boundary
+# change, this only refines the block_type tag).
+PROC_CUE = re.compile(
+    r"عدد\s+الحاضرين|عدد\s+الحضور|هل\s+من\s+حضور|بتسجيل\s+الحضور|النصاب|"
+    r"رفع\s+الأيدي|رفع\s+الايدي|من\s+يوافق|من\s+يعارض|من\s+يحتفظ(?:\s+بصوت)?|"
+    r"بالإجماع|بالاجماع|المصادقة\s+على|هل\s+هناك\s+(?:ملاحظات?|اعتراض)|"
+    r"أعلن\s+رفع\s+الجلسة|أقترح\s+رفع\s+الجلسة")
+
+
+def is_procedural_block(text: str) -> bool:
+    compact = SPACES.sub(" ", text).strip()
+    wc = len(re.findall(r"\S+", compact))
+    hits = len(PROC_CUE.findall(compact))
+    return (hits >= 1 and wc <= 30) or (hits >= 3 and wc <= 60)
+
+
 def block_type_for_text(text: str) -> str:
     compact = SPACES.sub(" ", text).strip()
     if REPORT_HEADER.search(compact[:350]):
@@ -671,6 +722,8 @@ def block_type_for_text(text: str) -> str:
         return "vote_or_article"
     if SPEECH_OPENERS.search(compact):
         return "speech"
+    if is_procedural_block(compact):
+        return "procedural"
     return "speech_like"
 
 
@@ -810,12 +863,16 @@ def write_csv(path: Path, rows: Iterable[dict[str, object]]) -> None:
 
 
 def in_scope_files() -> list[Path]:
+    if not CORPUS_DIR.is_dir():
+        print(f"error: corpus dir not found: {CORPUS_DIR} "
+              f"(set TUNISIA_CORPUS_DIR or run from a MENA_PERC clone)", file=sys.stderr)
+        return []
     paths = []
-    for path in ROOT.rglob("*_cleaned_clean.md"):
+    for path in sorted(CORPUS_DIR.rglob("*.md")):
         meta = infer_file_meta(path)
         if meta.include:
             paths.append(path)
-    return sorted(paths)
+    return paths
 
 
 def build_alias_table(roster: dict[str, list[MPRecord]], out: Path = ALIAS_PATH) -> int:

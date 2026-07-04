@@ -7,8 +7,10 @@ import csv
 import json
 import mimetypes
 import os
+import random
 import re
 import ssl
+import sys
 import threading
 import urllib.error
 import urllib.request
@@ -16,6 +18,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
+
+# speech text fields in the assignments CSV exceed the 128 KiB default
+csv.field_size_limit(min(2**31 - 1, sys.maxsize))
 
 APP_DIR = Path(__file__).resolve().parent
 ROOT = APP_DIR.parent
@@ -45,7 +50,7 @@ STATIC_DIR = APP_DIR / "static"
 TRANSLATION_DIR = APP_DIR / "translations"
 REVIEW_DIR = APP_DIR / "reviews"
 # Primary assignment source: the gena handoff-window extractor output.
-# Produce it with:  python3 "Python scripts/handoff_window_assignment_gena.py" --all \
+# Produce it with:  python3 "Python scripts/handoff_window_assignment.py" --all \
 #                       --output gena_speech_assignments.csv
 # Legacy deterministic CSVs remain as a fallback when the gena CSV is absent.
 GENA_CSV = Path(os.environ.get("CORPUSREVIEW_GENA_CSV", str(ROOT / "gena_speech_assignments.csv")))
@@ -53,6 +58,12 @@ EVENTS_CSV = ROOT / "deterministic_speech_assignments_2011_2021" / "assignment_e
 SPEECHES_CSV = ROOT / "deterministic_speech_assignments_2011_2021" / "speeches_deterministic_2011_2021.csv"
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
 DEFAULT_TRANSLATION_MODEL = "gpt-4.1-mini"
+# Seeded 50-speech sample for translation review; persisted (with cached
+# translations) so the sample stays stable across server restarts.
+SPEECH_SAMPLE_PATH = APP_DIR / "speech_sample_50.json"
+SPEECH_SAMPLE_SIZE = int(os.environ.get("CORPUSREVIEW_SAMPLE_SIZE", "50"))
+SPEECH_SAMPLE_SEED = int(os.environ.get("CORPUSREVIEW_SAMPLE_SEED", "20260704"))
+SPEECH_SAMPLE_JOB_KEY = "__speech_sample__"
 MANIFEST_CACHE: list[dict[str, object]] | None = None
 EVENTS_CACHE: dict[str, list[dict[str, object]]] | None = None
 SPEECHES_CACHE: dict[str, list[dict[str, object]]] | None = None
@@ -84,34 +95,34 @@ def json_response(handler: BaseHTTPRequestHandler, payload: object, status: int 
     handler.wfile.write(data)
 
 
-def corpus_index() -> dict[str, Path]:
-    """basename -> path for every corpus file anywhere under ROOT.
+CORPUS_DIR = Path(os.environ.get("CORPUSREVIEW_CORPUS_DIR", str(ROOT / "TN_democratic_cleaned_clean_md")))
 
-    The corpus moved into TN_democratic_cleaned_clean_md/, so a flat
-    ROOT-glob no longer finds it; index recursively instead.
+
+def corpus_index() -> dict[str, Path]:
+    """basename -> path for every corpus file.
+
+    The corpus lives in TN_democratic_cleaned_clean_md/ and was renamed:
+    files no longer carry the _cleaned_clean suffix, so index every .md
+    there.  Legacy checkouts without that directory fall back to the old
+    recursive *_cleaned_clean.md scan.
     """
     global CORPUS_INDEX
     if CORPUS_INDEX is None:
-        CORPUS_INDEX = {
-            path.name: path
-            for path in ROOT.rglob("*_cleaned_clean.md")
-            if APP_DIR not in path.parents
-        }
+        if CORPUS_DIR.is_dir():
+            CORPUS_INDEX = {path.name: path for path in CORPUS_DIR.rglob("*.md")}
+        else:
+            CORPUS_INDEX = {
+                path.name: path
+                for path in ROOT.rglob("*_cleaned_clean.md")
+                if APP_DIR not in path.parents
+            }
     return CORPUS_INDEX
 
 
-def safe_root_file(name: str) -> Path | None:
-    if "/" in name or "\\" in name:
-        return None
+def valid_source(name: str) -> Path | None:
+    """Resolve a document name to its corpus path; None if not a corpus doc."""
     path = corpus_index().get(name)
-    if path is not None:
-        return path
-    path = (ROOT / name).resolve()
-    try:
-        path.relative_to(ROOT)
-    except ValueError:
-        return None
-    return path
+    return path if path is not None and path.exists() else None
 
 
 def paired_translation(source_file: str) -> str:
@@ -157,8 +168,7 @@ def load_review(source_file: str) -> dict[str, object]:
 
 
 def write_review(source_file: str, review: dict[str, object]) -> dict[str, object]:
-    source_path = safe_root_file(source_file)
-    if not source_path or not source_path.exists() or not source_file.endswith("_cleaned_clean.md"):
+    if not valid_source(source_file):
         raise ValueError("Unknown source document")
 
     decisions = review.get("decisions", {})
@@ -296,8 +306,8 @@ def get_translation_job(source_file: str) -> dict[str, object] | None:
 
 def generate_translation(source_file: str) -> dict[str, object]:
     global MANIFEST_CACHE
-    source_path = safe_root_file(source_file)
-    if not source_path or not source_path.exists() or not source_file.endswith("_cleaned_clean.md"):
+    source_path = valid_source(source_file)
+    if not source_path:
         raise ValueError("Unknown source document")
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if not api_key:
@@ -336,8 +346,7 @@ def run_translation_job(source_file: str) -> None:
 
 
 def start_translation_job(source_file: str) -> dict[str, object]:
-    source_path = safe_root_file(source_file)
-    if not source_path or not source_path.exists() or not source_file.endswith("_cleaned_clean.md"):
+    if not valid_source(source_file):
         raise ValueError("Unknown source document")
     cached = translation_path(source_file)
     if cached.exists():
@@ -373,6 +382,157 @@ def translation_status(source_file: str) -> dict[str, object]:
     return job or {"status": "idle"}
 
 
+def translate_plain_text(text: str, model: str, api_key: str) -> str:
+    """Translate a single speech (plain text, no line numbering).
+
+    Long speeches are split on paragraph boundaries into <=8000-char parts
+    so each request stays well inside model limits.
+    """
+    parts: list[str] = []
+    current = ""
+    for para in text.split("\n\n"):
+        if current and len(current) + len(para) + 2 > 8000:
+            parts.append(current)
+            current = para
+        else:
+            current = f"{current}\n\n{para}" if current else para
+    if current:
+        parts.append(current)
+
+    translated: list[str] = []
+    for part in parts:
+        request_payload = {
+            "model": model,
+            "input": [
+                {
+                    "role": "system",
+                    "content": "You are a careful Arabic-to-English translator for parliamentary transcripts.",
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        "Translate this excerpt of Tunisian parliamentary minutes from Arabic "
+                        "into clear English. Preserve paragraph breaks. Return only the translation.\n\n"
+                        f"{part}"
+                    ),
+                },
+            ],
+        }
+        request = urllib.request.Request(
+            OPENAI_API_URL,
+            data=json.dumps(request_payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=120, context=make_ssl_context()) as response:
+                response_payload = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            detail = error.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"OpenAI API error {error.code}: {detail}") from error
+        except urllib.error.URLError as error:
+            raise RuntimeError(f"Could not reach the OpenAI API: {error}") from error
+        translated.append(extract_response_text(response_payload).strip())
+    return "\n\n".join(translated)
+
+
+SPEECH_SAMPLE_FIELDS = [
+    "speech_id",
+    "source_file",
+    "inferred_date",
+    "legislature_period",
+    "speaker_target_clean",
+    "speaker_type",
+    "speaker_role",
+    "mp_name_ar",
+    "mp_name_transliterated",
+    "mp_party_ar",
+    "assignment_method",
+    "assignment_confidence",
+    "word_count",
+    "text",
+]
+
+
+def build_speech_sample() -> list[dict[str, object]]:
+    """Seeded random sample of speeches from the assignments CSV.
+
+    Only substantive rows qualify: real speech text of at least 20 words
+    (drops procedural one-liners the reviewers don't need to read).
+    """
+    pool: list[dict[str, str]] = []
+    for rows in load_gena_by_source().values():
+        for row in rows:
+            try:
+                words = int(row.get("word_count") or 0)
+            except ValueError:
+                words = 0
+            if words >= 20 and (row.get("text") or "").strip():
+                pool.append(row)
+    rng = random.Random(SPEECH_SAMPLE_SEED)
+    picked = rng.sample(pool, min(SPEECH_SAMPLE_SIZE, len(pool)))
+    picked.sort(key=lambda row: (row.get("inferred_date") or "", row.get("speech_id") or ""))
+    return [
+        {**{field: row.get(field, "") for field in SPEECH_SAMPLE_FIELDS}, "translation": ""}
+        for row in picked
+    ]
+
+
+def load_speech_sample() -> list[dict[str, object]]:
+    if SPEECH_SAMPLE_PATH.exists():
+        try:
+            payload = json.loads(read_text(SPEECH_SAMPLE_PATH))
+            if isinstance(payload, list) and payload:
+                return payload
+        except json.JSONDecodeError:
+            pass
+    sample = build_speech_sample()
+    save_speech_sample(sample)
+    return sample
+
+
+def save_speech_sample(sample: list[dict[str, object]]) -> None:
+    SPEECH_SAMPLE_PATH.write_text(
+        json.dumps(sample, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
+
+
+def run_speech_sample_translation() -> None:
+    try:
+        api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+        if not api_key:
+            raise RuntimeError("OPENAI_API_KEY is not set")
+        model = os.environ.get("CORPUSREVIEW_TRANSLATION_MODEL", DEFAULT_TRANSLATION_MODEL).strip()
+        sample = load_speech_sample()
+        pending = [item for item in sample if not item.get("translation")]
+        update_translation_job(
+            SPEECH_SAMPLE_JOB_KEY,
+            totalChunks=len(pending), doneChunks=0, model=model,
+        )
+        for index, item in enumerate(pending, start=1):
+            item["translation"] = translate_plain_text(str(item.get("text", "")), model, api_key)
+            save_speech_sample(sample)
+            update_translation_job(SPEECH_SAMPLE_JOB_KEY, doneChunks=index)
+        update_translation_job(SPEECH_SAMPLE_JOB_KEY, status="done", error="")
+    except Exception as error:
+        update_translation_job(SPEECH_SAMPLE_JOB_KEY, status="error", error=str(error))
+
+
+def start_speech_sample_translation() -> dict[str, object]:
+    existing = get_translation_job(SPEECH_SAMPLE_JOB_KEY)
+    if existing and existing.get("status") == "running":
+        return existing
+    update_translation_job(
+        SPEECH_SAMPLE_JOB_KEY, status="running", error="", doneChunks=0, totalChunks=0
+    )
+    thread = threading.Thread(target=run_speech_sample_translation, daemon=True)
+    thread.start()
+    return get_translation_job(SPEECH_SAMPLE_JOB_KEY) or {"status": "running"}
+
+
 def load_manifest() -> list[dict[str, object]]:
     global MANIFEST_CACHE
     if MANIFEST_CACHE is not None:
@@ -389,7 +549,7 @@ def load_manifest() -> list[dict[str, object]]:
             {
                 "sourceFile": source_file,
                 "translationFile": translation_file,
-                "documentId": source_file.removesuffix("_cleaned_clean.md"),
+                "documentId": source_file.removesuffix(".md").removesuffix("_cleaned_clean"),
                 "handoffCount": event_counts.get(source_file, 0),
                 "hasTranslation": bool(translation_file),
             }
@@ -532,16 +692,23 @@ class CorpusReviewHandler(BaseHTTPRequestHandler):
         if path == "/":
             self.serve_static("index.html")
             return
+        if path == "/speeches":
+            self.serve_static("speeches.html")
+            return
         if path.startswith("/static/"):
             self.serve_static(unquote(path.removeprefix("/static/")))
+            return
+        if path == "/api/speech-sample":
+            job = get_translation_job(SPEECH_SAMPLE_JOB_KEY) or {}
+            json_response(self, {"speeches": load_speech_sample(), "job": job})
             return
         if path == "/api/documents":
             json_response(self, {"documents": load_manifest()})
             return
         if path == "/api/document":
             name = params.get("source", [""])[0]
-            source_path = safe_root_file(name)
-            if not source_path or not source_path.exists() or not name.endswith("_cleaned_clean.md"):
+            source_path = valid_source(name)
+            if not source_path:
                 json_response(self, {"error": "Unknown source document"}, 404)
                 return
             translation_name = paired_translation(name)
@@ -569,6 +736,12 @@ class CorpusReviewHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         if parsed.path == "/api/review":
             self.handle_review_post()
+            return
+        if parsed.path == "/api/speech-sample/translate":
+            try:
+                json_response(self, start_speech_sample_translation())
+            except Exception as error:
+                json_response(self, {"error": str(error)}, 500)
             return
         if parsed.path != "/api/translate":
             json_response(self, {"error": "Not found"}, 404)
