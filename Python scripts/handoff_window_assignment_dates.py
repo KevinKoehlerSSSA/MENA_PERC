@@ -375,7 +375,7 @@ def triangulate(p: Paths) -> None:
         })
 
     write_rows(p.triangulated, list(out[0]), out)
-    print(f"triangulate: {len(rows)} stems, {n_hard} hard-flagged, {n_soft} soft (Marsad miss only)")
+    print(f"triangulate: {len(rows)} stems, {n_hard} hard-flagged, {n_soft} soft-flagged")
 
 
 # ============================================================= stage 2: resolve
