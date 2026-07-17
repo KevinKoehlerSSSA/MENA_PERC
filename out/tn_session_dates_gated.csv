@@ -1,0 +1,549 @@
+session_stem,source_file,final_date,date_source,weekday,hijri,recurrence,marsad,sequence,collision,n_pass,n_fail,verdict,suggested_date,evidence
+2010-01-12__11,2010-01-12__11.md,2010-01-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2009-08-15x2
+2010-01-19__12,2010-01-19__12.md,2010-01-19,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2010-02-04__13,2010-02-04__13.md,2010-02-04,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2010-02-09__14,2010-02-09__14.md,2010-02-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2010-02-03x2
+2010-02-16__15,2010-02-16__15.md,2010-02-16,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-03-01__79,2010-03-01__79.md,2010-03-01,banner_recovered,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الثلاثاء
+2010-03-02__16,2010-03-02__16.md,2010-03-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-03-18__17,2010-03-18__17.md,2010-03-18,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2010-03-18__18,2010-03-18__18.md,2010-03-18,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2010-03-29__19,2010-03-29__19.md,2010-03-29,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2010-04-05__20,2010-04-05__20.md,2010-04-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2010-04-13__21,2010-04-13__21.md,2010-04-13,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-04-29__22,2010-04-29__22.md,2010-04-29,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2010-05-04__23,2010-05-04__23.md,2010-05-04,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2010-05-04x52
+2010-05-11__24,2010-05-11__24.md,2010-05-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-05-27__25,2010-05-27__25.md,2010-05-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2010-06-03__26,2010-06-03__26.md,2010-06-03,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2010-06-15__27,2010-06-15__27.md,2010-06-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-07-05__28,2010-07-05__28.md,2010-07-05,filename,fail,na,fail,na,pass,pass,2,2,conflict,2010-06-14,weekday:الثلاثاء; recurrence:mode=2010-06-14x14
+2010-07-07__29,2010-07-07__29.md,2010-07-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2010-07-20__30,2010-07-20__30.md,2010-07-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-10-12__1,2010-10-12__1.md,2010-10-12,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2010-10-12__2,2010-10-12__2.md,2010-10-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2010-10-19__3,2010-10-19__3.md,2010-10-19,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2011-01-17__28,2011-01-17__28.md,2011-01-17,banner_recovered,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الاربعاء
+2011-06-11__102,2011-06-11__102.md,2011-06-11,banner_recovered,na,na,na,na,pass,pass,2,0,confirmed,,
+2011-11-19__seg040,2011-11-19__seg040.md,2011-11-19,banner_or_carried_forward,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الجمعه
+2012-02-01__seg000,2012-02-01__seg000.md,2012-02-01,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2012-02-03__seg001,2012-02-03__seg001.md,2012-02-03,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2012-02-28__seg002,2012-02-28__seg002.md,2012-02-28,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2012-10-23__seg003,2012-10-23__seg003.md,2012-10-23,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2011-10-23x4
+2012-10-24__seg004,2012-10-24__seg004.md,2012-10-24,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء; recurrence:mode=2012-10-23x2
+2013-01-18__seg005,2013-01-18__seg005.md,2013-01-18,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2013-01-21__seg006,2013-01-21__seg006.md,2013-01-21,banner_or_carried_forward,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2013-01-21x2
+2013-01-23__seg007,2013-01-23__seg007.md,2013-01-23,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2013-01-29__seg008,2013-01-29__seg008.md,2013-01-29,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2013-01-31__seg009,2013-01-31__seg009.md,2013-01-31,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2013-02-01__seg010,2013-02-01__seg010.md,2013-02-01,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2013-02-04__seg011,2013-02-04__seg011.md,2013-02-04,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2013-02-05__seg012,2013-02-05__seg012.md,2013-02-05,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2013-02-11__seg013,2013-02-11__seg013.md,2013-02-11,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2013-02-12__seg014,2013-02-12__seg014.md,2013-02-12,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2013-02-18__seg015,2013-02-18__seg015.md,2013-02-18,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2013-02-19__seg016,2013-02-19__seg016.md,2013-02-19,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2013-02-21__seg017,2013-02-21__seg017.md,2013-02-21,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2013-02-22__seg018,2013-02-22__seg018.md,2013-02-22,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2013-02-25__seg019,2013-02-25__seg019.md,2013-02-25,banner_or_carried_forward,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2013-02-25x2
+2013-07-01__seg020,2013-07-01__seg020.md,2013-07-01,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2012-12-14x3
+2013-07-02__seg021,2013-07-02__seg021.md,2013-07-02,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2013-07-04__seg022,2013-07-04__seg022.md,2013-07-04,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2013-07-06__seg023,2013-07-06__seg023.md,2013-07-06,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2013-06-01x2
+2013-07-08__seg024,2013-07-08__seg024.md,2013-07-08,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2013-07-11__seg025,2013-07-11__seg025.md,2013-07-11,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس; recurrence:mode=2013-04-22x2
+2013-07-12__seg026,2013-07-12__seg026.md,2013-07-12,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2013-07-15__seg027,2013-07-15__seg027.md,2013-07-15,banner_or_carried_forward,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2013-07-15x2
+2014-01-01__seg041,2014-01-01__seg041.md,2014-01-01,banner_or_carried_forward,na,na,na,na,fail,pass,1,1,conflict,,
+2014-01-03__seg028,2014-01-03__seg028.md,2014-01-03,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه; recurrence:mode=2013-04-22x3
+2014-01-04__seg029,2014-01-04__seg029.md,2014-01-04,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-06__seg030,2014-01-06__seg030.md,2014-01-06,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-06__seg031,2014-01-06__seg031.md,2014-01-06,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2014-01-06__seg032,2014-01-06__seg032.md,2014-01-06,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-09__seg033,2014-01-09__seg033.md,2014-01-09,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-10__seg034,2014-01-10__seg034.md,2014-01-10,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2014-01-10__seg035,2014-01-10__seg035.md,2014-01-10,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-12__seg036,2014-01-12__seg036.md,2014-01-12,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاحد
+2014-01-13__seg037,2014-01-13__seg037.md,2014-01-13,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-14__seg038,2014-01-14__seg038.md,2014-01-14,banner_or_carried_forward,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2014-01-16__seg039,2014-01-16__seg039.md,2014-01-16,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-21__seg042,2014-01-21__seg042.md,2014-01-21,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-23__seg043,2014-01-23__seg043.md,2014-01-23,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-23__seg044,2014-01-23__seg044.md,2014-01-23,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-26__seg045,2014-01-26__seg045.md,2014-01-26,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-27__seg046,2014-01-27__seg046.md,2014-01-27,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-01-27__seg047,2014-01-27__seg047.md,2014-01-27,banner_or_carried_forward,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-11-20__seg048,2014-11-20__seg048.md,2014-11-20,banner_or_carried_forward,fail,na,na,na,na,pass,1,1,soft_flag,,weekday:الجمعه; recurrence:mode=2014-01-27x2
+2014-11-20__seg049,2014-11-20__seg049.md,2014-11-20,banner_or_carried_forward,na,na,na,na,na,pass,1,0,single_witness,,recurrence:mode=2014-01-26x2
+2014-12-02__N01,2014-12-02__N01.md,2014-12-02,multiday_first_day_min,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2014-12-04x26
+2014-12-09__02,2014-12-09__02.md,2014-12-09,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2014-12-09x5
+2014-12-10__03,2014-12-10__03.md,2014-12-10,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2014-12-30__04,2014-12-30__04.md,2014-12-30,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2014-12-31__05,2014-12-31__05.md,2014-12-31,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-01-20__06,2015-01-20__06.md,2015-01-20,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-01-21__07,2015-01-21__07.md,2015-01-21,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2015-01-21x18
+2015-01-22__08,2015-01-22__08.md,2015-01-22,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2015-01-22x7
+2015-01-23__09,2015-01-23__09.md,2015-01-23,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-01-24__10,2015-01-24__10.md,2015-01-24,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2015-01-26__11,2015-01-26__11.md,2015-01-26,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2015-02-02x9
+2015-02-04__12,2015-02-04__12.md,2015-02-04,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2015-02-04x51
+2015-02-05__13,2015-02-05__13.md,2015-02-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-02-20__14,2015-02-20__14.md,2015-02-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-02-27__15,2015-02-27__15.md,2015-02-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-03-04__16,2015-03-04__16.md,2015-03-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2015-03-05__17,2015-03-05__17.md,2015-03-05,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2015-03-05x2
+2015-03-06__18,2015-03-06__18.md,2015-03-06,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-03-18__19,2015-03-18__19.md,2015-03-18,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-04-01__20,2015-04-01__20.md,2015-04-01,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2015-04-03__21,2015-04-03__21.md,2015-04-03,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-04-08__22,2015-04-08__22.md,2015-04-08,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-04-14__23,2015-04-14__23.md,2015-04-14,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-04-15__24,2015-04-15__24.md,2015-04-15,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-05-05__25,2015-05-05__25.md,2015-05-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-05-12__26,2015-05-12__26.md,2015-05-12,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2015-05-12x2
+2015-05-13__N27,2015-05-13__N27.md,2015-05-13,multiday_first_day_min,na,na,na,na,na,pass,1,0,single_witness,,
+2015-05-15__28,2015-05-15__28.md,2015-05-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-05-18__29,2015-05-18__29.md,2015-05-18,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2015-05-19__30,2015-05-19__30.md,2015-05-19,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-05-31__31,2015-05-31__31.md,2015-05-31,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الثلاثاء; recurrence:mode=2015-06-02x2
+2015-06-05__32,2015-06-05__32.md,2015-06-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-06-10__33,2015-06-10__33.md,2015-06-10,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الثلاثاء
+2015-06-23__34,2015-06-23__34.md,2015-06-23,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2015-06-23x2
+2015-06-30__35,2015-06-30__35.md,2015-06-30,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-07-07__36,2015-07-07__36.md,2015-07-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-07-08__37,2015-07-08__37.md,2015-07-08,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-07-22__39,2015-07-22__39.md,2015-07-22,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2015-07-23__40,2015-07-23__40.md,2015-07-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-07-24__41,2015-07-24__41.md,2015-07-24,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2015-07-24x2
+2015-08-03__01,2015-08-03__01.md,2015-08-03,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-08-04__02,2015-08-04__02.md,2015-08-04,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2015-08-04x2
+2015-08-05__03,2015-08-05__03.md,2015-08-05,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-08-06__04,2015-08-06__04.md,2015-08-06,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2015-08-06x2
+2015-08-27__05,2015-08-27__05.md,2015-08-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-08-28__06,2015-08-28__06.md,2015-08-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-09-01__07,2015-09-01__07.md,2015-09-01,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-09-08__08,2015-09-08__08.md,2015-09-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-09-09__09,2015-09-09__09.md,2015-09-09,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2015-09-09x2
+2015-10-01__10,2015-10-01__10.md,2015-10-01,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الخميس
+2015-10-20__01,2015-10-20__01.md,2015-10-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-11-10__02,2015-11-10__02.md,2015-11-10,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-11-11__03,2015-11-11__03.md,2015-11-11,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2015-11-11x32
+2015-11-12__04,2015-11-12__04.md,2015-11-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-11-13__05,2015-11-13__05.md,2015-11-13,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-11-14__06,2015-11-14__06.md,2015-11-14,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2014-04-18x2
+2015-11-16__07,2015-11-16__07.md,2015-11-16,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-11-18__08,2015-11-18__08.md,2015-11-18,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2015-11-18x2
+2015-11-19__09,2015-11-19__09.md,2015-11-19,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-11-20__10,2015-11-20__10.md,2015-11-20,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2015-11-20x2
+2015-11-26__11,2015-11-26__11.md,2015-11-26,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-11-27__12,2015-11-27__12.md,2015-11-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-11-28__13,2015-11-28__13.md,2015-11-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2015-11-29__14,2015-11-29__14.md,2015-11-29,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاحد
+2015-11-30__15,2015-11-30__15.md,2015-11-30,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2015-11-30x2
+2015-12-01__16,2015-12-01__16.md,2015-12-01,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-12-02__17,2015-12-02__17.md,2015-12-02,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2015-12-02x69
+2015-12-03__18,2015-12-03__18.md,2015-12-03,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-12-04__19,2015-12-04__19.md,2015-12-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2015-12-05__20,2015-12-05__20.md,2015-12-05,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2015-12-05x2
+2015-12-06__21,2015-12-06__21.md,2015-12-06,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاحد
+2015-12-07__22,2015-12-07__22.md,2015-12-07,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-12-08__23,2015-12-08__23.md,2015-12-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2015-12-09__24,2015-12-09__24.md,2015-12-09,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2015-12-10__25,2015-12-10__25.md,2015-12-10,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2015-12-11__26,2015-12-11__26.md,2015-12-11,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2016-01-11x2
+2016-01-19__27,2016-01-19__27.md,2016-01-19,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-01-26__28,2016-01-26__28.md,2016-01-26,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-01-27__29,2016-01-27__29.md,2016-01-27,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-01-28__30,2016-01-28__30.md,2016-01-28,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2016-01-28x2
+2016-02-02__31,2016-02-02__31.md,2016-02-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-02-08__32,2016-02-08__32.md,2016-02-08,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-02-09__33,2016-02-09__33.md,2016-02-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-02-16__34,2016-02-16__34.md,2016-02-16,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-02-16__35,2016-02-16__35.md,2016-02-16,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-03-01__36,2016-03-01__36.md,2016-03-01,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-03-01x68
+2016-03-08__37,2016-03-08__37.md,2016-03-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-03-09__38,2016-03-09__38.md,2016-03-09,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-03-11__39,2016-03-11__39.md,2016-03-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-03-12__40,2016-03-12__40.md,2016-03-12,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-03-22__41,2016-03-22__41.md,2016-03-22,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-03-23__42,2016-03-23__42.md,2016-03-23,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:السبت
+2016-03-28__43,2016-03-28__43.md,2016-03-28,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-03-29__N44,2016-03-29__N44.md,2016-03-29,multiday_first_day_min,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الثلاثاء
+2016-03-30__48,2016-03-30__48.md,2016-03-30,banner_recovered,fail,na,pass,na,fail,pass,2,2,conflict,,weekday:الجمعه; recurrence:mode=2016-03-30x3
+2016-04-05__45,2016-04-05__45.md,2016-04-05,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-04-05x2
+2016-04-08__46,2016-04-08__46.md,2016-04-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-04-09__47,2016-04-09__47.md,2016-04-09,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2016-04-09x2
+2016-04-11__48,2016-04-11__48.md,2016-04-11,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2016-04-11x2
+2016-04-12__49,2016-04-12__49.md,2016-04-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-04-13__50,2016-04-13__50.md,2016-04-13,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-04-14__51,2016-04-14__51.md,2016-04-14,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2016-04-15__52,2016-04-15__52.md,2016-04-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-04-16__53,2016-04-16__53.md,2016-04-16,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2016-04-16x2
+2016-04-18__49,2016-04-18__49.md,2016-04-18,banner_recovered,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الثلاثاء; recurrence:mode=2017-04-18x48
+2016-04-26__54,2016-04-26__54.md,2016-04-26,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-04-26x77
+2016-05-03__55,2016-05-03__55.md,2016-05-03,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-05-10__56,2016-05-10__56.md,2016-05-10,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-05-11__06,2016-05-11__06.md,2016-05-11,banner_recovered,na,na,na,na,fail,pass,1,1,conflict,,
+2016-05-11__57,2016-05-11__57.md,2016-05-11,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-05-12__58,2016-05-12__58.md,2016-05-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2016-05-24__59,2016-05-24__59.md,2016-05-24,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-05-31__60,2016-05-31__60.md,2016-05-31,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-05-31x2
+2016-06-01__61,2016-06-01__61.md,2016-06-01,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-06-02__62,2016-06-02__62.md,2016-06-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2016-06-07__63,2016-06-07__63.md,2016-06-07,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-06-07x2
+2016-06-08__64,2016-06-08__64.md,2016-06-08,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2016-06-08x2
+2016-06-09__65,2016-06-09__65.md,2016-06-09,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2016-06-09x2
+2016-06-10__66,2016-06-10__66.md,2016-06-10,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-06-14__67,2016-06-14__67.md,2016-06-14,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-06-14x2
+2016-06-15__68,2016-06-15__68.md,2016-06-15,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2016-06-15x2
+2016-06-21__25,2016-06-21__25.md,2016-06-21,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الثلاثاء
+2016-06-21__69,2016-06-21__69.md,2016-06-21,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-06-21x2
+2016-06-22__70,2016-06-22__70.md,2016-06-22,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-06-23__71,2016-06-23__71.md,2016-06-23,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-07-12__72,2016-07-12__72.md,2016-07-12,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-07-12x74
+2016-08-26__No_vote_de_confiance_au_gouvernement,2016-08-26__No_vote_de_confiance_au_gouvernement.md,2016-08-26,filename_or_banner,na,na,na,na,na,pass,1,0,single_witness,,
+2016-09-16__01,2016-09-16__01.md,2016-09-16,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-09-17__02,2016-09-17__02.md,2016-09-17,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2016-09-19__03,2016-09-19__03.md,2016-09-19,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2016-10-17__01,2016-10-17__01.md,2016-10-17,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2016-10-17x2
+2016-11-01__02,2016-11-01__02.md,2016-11-01,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2016-11-01x128
+2016-11-24__9,2016-11-24__9.md,2016-11-24,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2016-11-24x5
+2016-11-25__10,2016-11-25__10.md,2016-11-25,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-11-26__11,2016-11-26__11.md,2016-11-26,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2016-11-28__12,2016-11-28__12.md,2016-11-28,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2016-11-28x4
+2016-11-29__13,2016-11-29__13.md,2016-11-29,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-11-29__48,2016-11-29__48.md,2016-11-29,banner_recovered,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الاثنين; recurrence:mode=2017-03-31x4
+2016-11-30__14,2016-11-30__14.md,2016-11-30,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2016-11-30x51
+2016-12-01__15,2016-12-01__15.md,2016-12-01,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2016-12-02__16,2016-12-02__16.md,2016-12-02,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2016-12-02x2
+2016-12-03__17,2016-12-03__17.md,2016-12-03,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2016-12-03x2
+2016-12-05__18,2016-12-05__18.md,2016-12-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2016-12-07__19,2016-12-07__19.md,2016-12-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2016-12-09__21,2016-12-09__21.md,2016-12-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-12-10__22,2016-12-10__22.md,2016-12-10,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2016-12-10x2
+2016-12-23__23,2016-12-23__23.md,2016-12-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2016-12-27__24,2016-12-27__24.md,2016-12-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2016-2017__03,2016-2017__03.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2016-2017__04,2016-2017__04.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2016-2017__05,2016-2017__05.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2016-2017__20,2016-2017__20.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2016-2017__7,2016-2017__7.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2016-2017__75,2016-2017__75.md,2017-07-27,squeeze,na,na,na,na,pass,pass,2,0,confirmed,,
+2016-2017__8,2016-2017__8.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2017-01-17__26,2017-01-17__26.md,2017-01-17,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-01-18__27,2017-01-18__27.md,2017-01-18,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2017-01-18x2
+2017-01-31__29,2017-01-31__29.md,2017-01-31,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-02-01__30,2017-02-01__30.md,2017-02-01,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2016-12-31x3
+2017-02-07__31,2017-02-07__31.md,2017-02-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-02-21__32,2017-02-21__32.md,2017-02-21,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-02-22__33,2017-02-22__33.md,2017-02-22,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2017-02-22x44
+2017-02-28__34,2017-02-28__34.md,2017-02-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-03-01__35,2017-03-01__35.md,2017-03-01,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2017-03-03__36,2017-03-03__36.md,2017-03-03,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2017-03-07__37,2017-03-07__37.md,2017-03-07,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2017-03-07x2
+2017-03-08__38,2017-03-08__38.md,2017-03-08,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2017-03-08x2
+2017-03-14__39,2017-03-14__39.md,2017-03-14,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-02-16x3
+2017-03-16__41,2017-03-16__41.md,2017-03-16,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2017-03-16x2
+2017-03-28__42,2017-03-28__42.md,2017-03-28,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-03-28x32
+2017-03-29__43,2017-03-29__43.md,2017-03-29,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2017-03-29x2
+2017-04-04__44,2017-04-04__44.md,2017-04-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-04-12__47,2017-04-12__47.md,2017-04-12,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2016-11-29x3
+2017-04-19__50,2017-04-19__50.md,2017-04-19,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2017-04-25__51,2017-04-25__51.md,2017-04-25,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-04-25x2
+2017-05-16__53,2017-05-16__53.md,2017-05-16,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-05-16x2
+2017-05-20__54,2017-05-20__54.md,2017-05-20,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2017-05-20x2
+2017-05-23__55,2017-05-23__55.md,2017-05-23,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-05-23x2
+2017-05-30__56,2017-05-30__56.md,2017-05-30,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-05-30x51
+2017-06-06__57,2017-06-06__57.md,2017-06-06,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-06-05x2
+2017-06-13__58,2017-06-13__58.md,2017-06-13,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-06-13x2
+2017-06-20__59,2017-06-20__59.md,2017-06-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-07-04__60,2017-07-04__60.md,2017-07-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-07-05__61,2017-07-05__61.md,2017-07-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2017-07-06__62,2017-07-06__62.md,2017-07-06,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2017-07-08__63,2017-07-08__63.md,2017-07-08,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2017-07-08x2
+2017-07-10__76,2017-07-10__76.md,2017-07-10,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:السبت
+2017-07-11__64,2017-07-11__64.md,2017-07-11,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-07-11x53
+2017-07-15__65,2017-07-15__65.md,2017-07-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2017-07-17__66,2017-07-17__66.md,2017-07-17,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2016-06-09x5
+2017-07-18__67,2017-07-18__67.md,2017-07-18,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-07-18x10
+2017-07-19__68,2017-07-19__68.md,2017-07-19,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2017-07-19x2
+2017-07-20__69,2017-07-20__69.md,2017-07-20,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2017-07-20x2
+2017-07-21__70,2017-07-21__70.md,2017-07-21,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2017-07-22__71,2017-07-22__71.md,2017-07-22,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2017-07-24__72,2017-07-24__72.md,2017-07-24,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-06-13x5
+2017-07-26__73,2017-07-26__73.md,2017-07-26,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2017-07-26x2
+2017-07-27__74,2017-07-27__74.md,2017-07-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2017-07-27__95,2017-07-27__95.md,2017-07-27,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2017-09-11__01,2017-09-11__01.md,2017-09-11,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-07-18x3
+2017-09-12__02,2017-09-12__02.md,2017-09-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-07-19x2
+2017-09-20__03,2017-09-20__03.md,2017-09-20,filename_or_banner,fail,na,pass,na,pass,pass,3,1,soft_flag,,weekday:السبت; recurrence:mode=2017-09-20x2
+2017-09-26__04,2017-09-26__04.md,2017-09-26,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-10-18__1,2017-10-18__1.md,2017-10-18,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2017-10-27__2,2017-10-27__2.md,2017-10-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2017-10-30__3,2017-10-30__3.md,2017-10-30,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-10-30x3
+2017-11-07__4,2017-11-07__4.md,2017-11-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-11-11__5,2017-11-11__5.md,2017-11-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2017-11-14__6,2017-11-14__6.md,2017-11-14,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-11-14x20
+2017-11-21__7,2017-11-21__7.md,2017-11-21,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2017-11-21x2
+2017-11-22__8,2017-11-22__8.md,2017-11-22,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2017-11-23__9,2017-11-23__9.md,2017-11-23,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2017-11-23x3
+2017-11-24__10,2017-11-24__10.md,2017-11-24,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2017-11-24x2
+2017-11-27__12,2017-11-27__12.md,2017-11-27,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-11-27x3
+2017-11-29__14,2017-11-29__14.md,2017-11-29,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2017-11-29x96
+2017-12-04__16,2017-12-04__16.md,2017-12-04,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-12-04x41
+2017-12-12__22,2017-12-12__22.md,2017-12-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2017-2018__86,2017-2018__86.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2017-2018__89,2017-2018__89.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-01-09__25,2018-01-09__25.md,2018-01-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2018-01-20__29,2018-01-20__29.md,2018-01-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2018-01-27__31,2018-01-27__31.md,2018-01-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2018-02-01__33,2018-02-01__33.md,2018-02-01,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس; recurrence:mode=2017-07-11x2
+2018-02-10__35,2018-02-10__35.md,2018-02-10,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2018-02-17__39,2018-02-17__39.md,2018-02-17,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2018-02-24__40,2018-02-24__40.md,2018-02-24,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2018-03-06__41,2018-03-06__41.md,2018-03-06,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2018-03-10__42,2018-03-10__42.md,2018-03-10,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2018-02-23x4
+2018-03-13__43,2018-03-13__43.md,2018-03-13,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2018-03-22__46,2018-03-22__46.md,2018-03-22,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2018-03-22x100
+2018-03-22__50,2018-03-22__50.md,2018-03-22,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الخميس
+2018-03-23__47,2018-03-23__47.md,2018-03-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2018-03-24__48,2018-03-24__48.md,2018-03-24,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2017-05-17x8
+2018-03-26__49,2018-03-26__49.md,2018-03-26,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-03-26x15
+2018-04-02__75,2018-04-02__75.md,2018-04-02,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الثلاثاء
+2018-04-03__76,2018-04-03__76.md,2018-04-03,filename_or_banner,na,na,na,na,fail,pass,1,1,conflict,,
+2018-04-10__56,2018-04-10__56.md,2018-04-10,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2018-04-10x60
+2018-05-08__64,2018-05-08__64.md,2018-05-08,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2018-05-08x39
+2018-05-15__65,2018-05-15__65.md,2018-05-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2018-05-16__66,2018-05-16__66.md,2018-05-16,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2018-05-16x44
+2018-05-17__49,2018-05-17__49.md,2018-05-17,banner_recovered,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الاثنين
+2018-05-21__67,2018-05-21__67.md,2018-05-21,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-05-21x16
+2018-05-29__72,2018-05-29__72.md,2018-05-29,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2018-05-29x42
+2018-06-21__77,2018-06-21__77.md,2018-06-21,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2018-06-22__80,2018-06-22__80.md,2018-06-22,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الجمعه
+2018-06-25__78,2018-06-25__78.md,2018-06-25,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-06-25x2
+2018-07-02__81,2018-07-02__81.md,2018-07-02,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-07-02x4
+2018-07-03__82,2018-07-03__82.md,2018-07-03,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2018-07-03x42
+2018-07-04__83,2018-07-04__83.md,2018-07-04,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2018-07-04x18
+2018-07-06__84,2018-07-06__84.md,2018-07-06,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2018-07-06x3
+2018-07-12__87,2018-07-12__87.md,2018-07-12,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2018-07-19__90,2018-07-19__90.md,2018-07-19,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2018-07-19x5
+2018-07-20__91,2018-07-20__91.md,2018-07-20,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه; recurrence:mode=2017-09-25x5
+2018-07-23__92,2018-07-23__92.md,2018-07-23,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-07-23x2
+2018-07-24__93,2018-07-24__93.md,2018-07-24,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2018-07-24x3
+2018-07-26__94,2018-07-26__94.md,2018-07-26,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2018-07-26x6
+2018-07-28__96,2018-07-28__96.md,2018-07-28,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2018-06-29x8
+2018-10-08__1,2018-10-08__1.md,2018-10-08,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الثلاثاء
+2018-10-10__3,2018-10-10__3.md,2018-10-10,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2018-10-10x41
+2018-10-22__6,2018-10-22__6.md,2018-10-22,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-05-28x6
+2018-10-26__8,2018-10-26__8.md,2018-10-26,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2018-10-29__29,2018-10-29__29.md,2018-10-29,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الخميس
+2018-10-29__9,2018-10-29__9.md,2018-10-29,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-10-12x5
+2018-11-02__11,2018-11-02__11.md,2018-11-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2018-11-09__13,2018-11-09__13.md,2018-11-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2018-11-12__14,2018-11-12__14.md,2018-11-12,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-10-12x3
+2018-11-19__16,2018-11-19__16.md,2018-11-19,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2018-11-09x4
+2018-11-28__21,2018-11-28__21.md,2018-11-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاربعاء
+2018-11-29__22,2018-11-29__22.md,2018-11-29,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2018-12-02__25,2018-12-02__25.md,2018-12-02,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2018-12-05__28,2018-12-05__28.md,2018-12-05,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2018-12-01x2
+2018-12-07__30,2018-12-07__30.md,2018-12-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2018-12-09__32,2018-12-09__32.md,2018-12-09,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2018-12-10__33,2018-12-10__33.md,2018-12-10,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2017-12-18x7
+2018-2019__101,2018-2019__101.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__103,2018-2019__103.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__111,2018-2019__111.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__114,2018-2019__114.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__116,2018-2019__116.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__118,2018-2019__118.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__40,2018-2019__40.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2018-2019__85,2018-2019__85.md,,session_range,na,na,na,na,na,na,0,0,no_date,,
+2019-01-02__39,2019-01-02__39.md,2019-01-02,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الثلاثاء
+2019-01-07__38,2019-01-07__38.md,2019-01-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2019-01-11__42,2019-01-11__42.md,2019-01-11,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2019-01-11x4
+2019-01-18__45,2019-01-18__45.md,2019-01-18,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2019-01-21__46,2019-01-21__46.md,2019-01-21,banner_recovered,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2019-01-23__48,2019-01-23__48.md,2019-01-23,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2019-01-23x31
+2019-01-28__49,2019-01-28__49.md,2019-01-28,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2019-01-28x2
+2019-01-31__52,2019-01-31__52.md,2019-01-31,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-02-04__53,2019-02-04__53.md,2019-02-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2019-02-05__54,2019-02-05__54.md,2019-02-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-02-08__55,2019-02-08__55.md,2019-02-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2019-02-11__56,2019-02-11__56.md,2019-02-11,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2019-01-30x3
+2019-02-12__57,2019-02-12__57.md,2019-02-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-02-15__59,2019-02-15__59.md,2019-02-15,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2019-02-25__64,2019-02-25__64.md,2019-02-25,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2019-02-25x9
+2019-02-27__66,2019-02-27__66.md,2019-02-27,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2019-02-27x38
+2019-03-01__68,2019-03-01__68.md,2019-03-01,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الاربعاء
+2019-03-05__67,2019-03-05__67.md,2019-03-05,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2019-03-05x76
+2019-03-08__69,2019-03-08__69.md,2019-03-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2019-03-12__70,2019-03-12__70.md,2019-03-12,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-03-25__72,2019-03-25__72.md,2019-03-25,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2019-03-25x8
+2019-03-27__74,2019-03-27__74.md,2019-03-27,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-04-04__77,2019-04-04__77.md,2019-04-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-04-08__78,2019-04-08__78.md,2019-04-08,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2019-04-08x29
+2019-04-10__79,2019-04-10__79.md,2019-04-10,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-04-11__80,2019-04-11__80.md,2019-04-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-04-11__81,2019-04-11__81.md,2019-04-11,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الاثنين
+2019-04-16__82,2019-04-16__82.md,2019-04-16,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-04-17__83,2019-04-17__83.md,2019-04-17,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-04-23__84,2019-04-23__84.md,2019-04-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-04-28__86,2019-04-28__86.md,2019-04-28,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2019-04-30__87,2019-04-30__87.md,2019-04-30,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2019-04-30x2
+2019-05-03__88,2019-05-03__88.md,2019-05-03,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2019-05-20__90,2019-05-20__90.md,2019-05-20,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2019-05-21__91,2019-05-21__91.md,2019-05-21,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2019-05-21x2
+2019-05-21__94,2019-05-21__94.md,2019-05-21,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الثلاثاء
+2019-05-22__92,2019-05-22__92.md,2019-05-22,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-05-23__93,2019-05-23__93.md,2019-05-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-05-29__95,2019-05-29__95.md,2019-05-29,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-05-30__96,2019-05-30__96.md,2019-05-30,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-06-11__97,2019-06-11__97.md,2019-06-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-06-12__100,2019-06-12__100.md,2019-06-12,filename_or_banner,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الجمعه
+2019-06-12__98,2019-06-12__98.md,2019-06-12,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-06-13__99,2019-06-13__99.md,2019-06-13,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2019-06-22__105,2019-06-22__105.md,2019-06-22,filename_or_banner,na,na,na,na,fail,pass,1,1,conflict,,
+2019-06-25__104,2019-06-25__104.md,2019-06-25,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-07-01__106,2019-07-01__106.md,2019-07-01,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-02__107,2019-07-02__107.md,2019-07-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2019-07-03__108,2019-07-03__108.md,2019-07-03,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-09__109,2019-07-09__109.md,2019-07-09,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-10__110,2019-07-10__110.md,2019-07-10,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-11__112,2019-07-11__112.md,2019-07-11,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-16__113,2019-07-16__113.md,2019-07-16,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2019-07-16x42
+2019-07-18__115,2019-07-18__115.md,2019-07-18,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-07-23__117,2019-07-23__117.md,2019-07-23,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-08-22__01_Revision_de_la_loi_electorale,2019-08-22__01_Revision_de_la_loi_electorale.md,2019-08-22,filename_or_banner,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الخميس
+2019-10-23__02_Le_Serment_constitutionnel_de_Said,2019-10-23__02_Le_Serment_constitutionnel_de_Said.md,2019-10-23,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2019-12-13__34,2019-12-13__34.md,2019-12-13,filename_or_banner,na,na,na,na,fail,pass,1,1,conflict,,
+2020-01-22__8,2020-01-22__8.md,2020-01-22,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2020-02-24__47,2020-02-24__47.md,2020-02-24,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الخميس
+2020-09-22__11,2020-09-22__11.md,2020-09-22,filename_or_banner,fail,na,pass,na,na,pass,2,1,soft_flag,,weekday:الجمعه; recurrence:mode=2020-09-22x3
+2020-09-24__1,2020-09-24__1.md,2020-09-24,filename_or_banner,fail,na,na,na,na,pass,1,1,soft_flag,,weekday:الجمعه
+2020-10-08__2,2020-10-08__2.md,2020-10-08,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الثلاثاء
+2020-10-20__3,2020-10-20__3.md,2020-10-20,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2020-10-20x52
+2020-10-21__45,2020-10-21__45.md,2020-10-21,filename_or_banner,na,na,na,na,fail,pass,1,1,conflict,,recurrence:mode=2020-10-28x2
+2020-11-05__6,2020-11-05__6.md,2020-11-05,banner_recovered,pass,pass,pass,na,pass,pass,5,0,confirmed,,weekday:الخميس; hijri:19 ربيع الاول 1442->2020-11-05; recurrence:mode=2020-11-05x21
+2020-11-11__40,2020-11-11__40.md,2020-11-11,filename_or_banner,na,na,fail,na,fail,pass,1,2,conflict,2019-11-29,recurrence:mode=2019-11-29x3
+2020-11-12__9,2020-11-12__9.md,2020-11-12,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2020-11-12x4
+2020-11-14__10,2020-11-14__10.md,2020-11-14,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2020-11-28__12,2020-11-28__12.md,2020-11-28,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2020-11-28x3
+2020-11-29__13,2020-11-29__13.md,2020-11-29,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2020-11-30__14,2020-11-30__14.md,2020-11-30,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2020-11-30x4
+2020-12-02__16,2020-12-02__16.md,2020-12-02,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2020-12-02x117
+2020-12-04__18,2020-12-04__18.md,2020-12-04,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2020-12-07__21,2020-12-07__21.md,2020-12-07,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين
+2020-12-08__22,2020-12-08__22.md,2020-12-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2020-12-09__23,2020-12-09__23.md,2020-12-09,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2020-12-09x2
+2020-12-15__24,2020-12-15__24.md,2020-12-15,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2020-12-15x2
+2021-01-05__25,2021-01-05__25.md,2021-01-05,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2021-01-19__31,2021-01-19__31.md,2021-01-19,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الثلاثاء
+2021-01-22__30,2021-01-22__30.md,2021-01-22,filename_or_banner,pass,na,na,na,fail,pass,2,1,conflict,,weekday:الجمعه
+2021-02-01__28,2021-02-01__28.md,2021-02-01,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2021-02-16__33,2021-02-16__33.md,2021-02-16,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2021-02-16x58
+2021-02-19__34,2021-02-19__34.md,2021-02-19,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2021-02-19x2
+2021-03-01__37,2021-03-01__37.md,2021-03-01,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الخميس
+2021-03-04__41,2021-03-04__41.md,2021-03-04,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2021-03-18__46,2021-03-18__46.md,2021-03-18,banner_recovered,fail,na,na,na,fail,pass,1,2,conflict,,weekday:الاثنين; recurrence:mode=2021-04-12x22
+2021-03-22__42,2021-03-22__42.md,2021-03-22,banner_recovered,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2021-03-22x38
+2023-03-31__01,2023-03-31__01.md,2023-03-31,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الاثنين
+2023-04-11__02,2023-04-11__02.md,2023-04-11,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2023-04-12__03,2023-04-12__03.md,2023-04-12,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-04-13__04,2023-04-13__04.md,2023-04-13,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2023-04-14__05,2023-04-14__05.md,2023-04-14,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2023-04-25__06,2023-04-25__06.md,2023-04-25,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2023-04-26__07,2023-04-26__07.md,2023-04-26,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-04-27__08,2023-04-27__08.md,2023-04-27,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2023-04-29__09,2023-04-29__09.md,2023-04-29,filename_or_banner,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2023-05-11__10,2023-05-11__10.md,2023-05-11,manual_multiday_first_day,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2023-05-23__11,2023-05-23__11.md,2023-05-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثا
+2023-06-01__12,2023-06-01__12.md,2023-06-01,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2023-07-05__13,2023-07-05__13.md,2023-07-05,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-07-11__14,2023-07-11__14.md,2023-07-11,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-07-17__15,2023-07-17__15.md,2023-07-17,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-07-21__16,2023-07-21__16.md,2023-07-21,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2023-07-24__17,2023-07-24__17.md,2023-07-24,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-07-26__18,2023-07-26__18.md,2023-07-26,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-07-28__19,2023-07-28__19.md,2023-07-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه; recurrence:mode=2023-06-22x2
+2023-07-29__20,2023-07-29__20.md,2023-07-29,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2023-07-31__21,2023-07-31__21.md,2023-07-31,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2023-02-23,recurrence:mode=2023-02-23x3
+2023-10-03__01,2023-10-03__01.md,2023-10-03,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2022-12-29x2
+2023-10-17__02,2023-10-17__02.md,2023-10-17,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2023-08-23x2
+2023-10-17__03,2023-10-17__03.md,2023-10-17,filename_or_banner,pass,na,fail,na,pass,pass,3,1,conflict,2022-07-01,weekday:الثلاثاء; recurrence:mode=2022-07-01x3
+2023-10-23__04,2023-10-23__04.md,2023-10-23,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2023-06-23,recurrence:mode=2023-06-23x4
+2023-10-31__05,2023-10-31__05.md,2023-10-31,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2023-09-07x2
+2023-11-02__06,2023-11-02__06.md,2023-11-02,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2023-07-06,recurrence:mode=2023-07-06x4
+2023-11-17__N07,2023-11-17__N07.md,2023-11-17,multiday_first_day_min,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الجمعه
+2023-11-18__08,2023-11-18__08.md,2023-11-18,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2023-11-18__09,2023-11-18__09.md,2023-11-18,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2023-10-12x2
+2023-11-21__10,2023-11-21__10.md,2023-11-21,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2023-11-21x22
+2023-11-23__11,2023-11-23__11.md,2023-11-23,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-11-23__12,2023-11-23__12.md,2023-11-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2023-11-24__13,2023-11-24__13.md,2023-11-24,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه; recurrence:mode=2023-06-05x2
+2023-11-25__14,2023-11-25__14.md,2023-11-25,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2023-11-27__15,2023-11-27__15.md,2023-11-27,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-11-28__16,2023-11-28__16.md,2023-11-28,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2023-10-11x2
+2023-11-29__17,2023-11-29__17.md,2023-11-29,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-11-30__18,2023-11-30__18.md,2023-11-30,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس; recurrence:mode=2023-07-03x2
+2023-12-01__19,2023-12-01__19.md,2023-12-01,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-12-02__20,2023-12-02__20.md,2023-12-02,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2023-12-04__21,2023-12-04__21.md,2023-12-04,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2023-12-04x2
+2023-12-05__22,2023-12-05__22.md,2023-12-05,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-12-06__23,2023-12-06__23.md,2023-12-06,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-12-07__24,2023-12-07__24.md,2023-12-07,filename_or_banner,pass,na,fail,na,pass,pass,3,1,conflict,2023-03-08,weekday:الخميس; recurrence:mode=2023-03-08x3
+2023-12-08__25,2023-12-08__25.md,2023-12-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2023-12-09__26,2023-12-09__26.md,2023-12-09,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2023-12-10__27,2023-12-10__27.md,2023-12-10,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,
+2023-12-26__28,2023-12-26__28.md,2023-12-26,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2024-01-16__N29,2024-01-16__N29.md,2024-01-16,multiday_first_day_min,pass,na,fail,na,na,pass,2,1,conflict,2023-06-05,weekday:الثلاثاء; recurrence:mode=2023-06-05x4
+2024-01-23__30,2024-01-23__30.md,2024-01-23,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2024-01-30__31,2024-01-30__31.md,2024-01-30,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2023-11-08x2
+2024-02-06__N32,2024-02-06__N32.md,2024-02-06,multiday_first_day_min,pass,na,fail,na,na,pass,2,1,conflict,2024-01-16,weekday:الثلاثاء; recurrence:mode=2024-01-16x7
+2024-02-13__N33,2024-02-13__N33.md,2024-02-13,multiday_first_day_min,na,na,na,na,na,pass,1,0,single_witness,,
+2024-02-20__N34,2024-02-20__N34.md,2024-02-20,multiday_first_day_min,pass,na,fail,na,na,pass,2,1,conflict,2024-01-16,weekday:الثلاثاء; recurrence:mode=2024-01-16x12
+2024-02-27__35,2024-02-27__35.md,2024-02-27,filename_or_banner,pass,na,fail,na,pass,pass,3,1,conflict,2023-06-13,weekday:الثلاثاء; recurrence:mode=2023-06-13x4
+2024-03-06__36,2024-03-06__36.md,2024-03-06,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2024-02-16,recurrence:mode=2024-02-16x8
+2024-03-27__37,2024-03-27__37.md,2024-03-27,filename_or_banner,fail,na,fail,na,pass,pass,2,2,conflict,2024-02-26,weekday:الثلاثاء; recurrence:mode=2024-02-26x7
+2024-05-07__38,2024-05-07__38.md,2024-05-07,filename_or_banner,pass,na,fail,na,pass,pass,3,1,conflict,2024-03-04,weekday:الثلاثاء; recurrence:mode=2024-03-04x3
+2024-05-20__N39,2024-05-20__N39.md,2024-05-20,multiday_first_day_min,fail,na,fail,na,na,pass,1,2,conflict,2024-04-22,weekday:الثلاثاء; recurrence:mode=2024-04-22x5
+2024-05-29__40,2024-05-29__40.md,2024-05-29,filename_or_banner,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2024-02-08x2
+2024-06-04__N41,2024-06-04__N41.md,2024-06-04,multiday_first_day_min,pass,na,fail,na,na,pass,2,1,conflict,2024-05-14,weekday:الثلاثاء; recurrence:mode=2024-05-14x3
+2024-06-12__42,2024-06-12__42.md,2024-06-12,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2024-05-20,recurrence:mode=2024-05-20x3
+2024-06-21__N43,2024-06-21__N43.md,2024-06-21,multiday_first_day_min,fail,na,fail,na,na,pass,1,2,conflict,2024-05-20,weekday:الخميس; recurrence:mode=2024-05-20x9
+2024-06-25__N44,2024-06-25__N44.md,2024-06-25,multiday_first_day_min,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2024-06-26x63
+2024-07-02__N45,2024-07-02__N45.md,2024-07-02,multiday_first_day_min,na,na,fail,na,na,pass,1,1,conflict,2024-04-25,recurrence:mode=2024-04-25x3
+2024-07-06__N46,2024-07-06__N46.md,2024-07-06,multiday_first_day_min,na,na,fail,na,na,pass,1,1,conflict,2024-05-15,recurrence:mode=2024-05-15x3
+2024-07-16__N47,2024-07-16__N47.md,2024-07-16,multiday_first_day_min,na,na,na,na,na,pass,1,0,single_witness,,
+2024-07-23__48,2024-07-23__48.md,2024-07-23,filename_or_banner,na,na,fail,na,pass,pass,2,1,conflict,2023-10-01,recurrence:mode=2023-10-01x5
+2024-07-30__N49,2024-07-30__N49.md,2024-07-30,multiday_first_day_min,pass,na,fail,na,na,pass,2,1,conflict,2024-07-01,weekday:الثلاثاء; recurrence:mode=2024-07-01x5
+2024-09-27__Session_Ordinaire,2024-09-27__Session_Ordinaire.md,2024-09-27,filename,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الجمعه; recurrence:mode=2024-06-12x17
+2024-10-29__01,2024-10-29__01.md,2024-10-29,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2024-10-29x169
+2024-11-08__02,2024-11-08__02.md,2024-11-08,filename_or_banner,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه; recurrence:mode=2024-02-13x5
+2024-11-09__03,2024-11-09__03.md,2024-11-09,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت; recurrence:mode=2024-02-21x5
+2024-11-11__04,2024-11-11__04.md,2024-11-11,filename,na,na,na,na,pass,pass,2,0,confirmed,,
+2024-11-11__05,2024-11-11__05.md,2024-11-11,filename,na,na,na,na,pass,pass,2,0,confirmed,,recurrence:mode=2024-03-09x3
+2024-11-12__06,2024-11-12__06.md,2024-11-12,filename_or_banner,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2024-11-12x2
+2024-11-13__07,2024-11-13__07.md,2024-11-13,filename_or_banner,na,na,pass,na,pass,pass,3,0,confirmed,,recurrence:mode=2024-11-13x2
+2024-11-14__08,2024-11-14__08.md,2024-11-14,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس
+2024-11-15__09,2024-11-15__09.md,2024-11-15,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الجمعه; recurrence:mode=2024-11-15x3
+2024-11-16__10,2024-11-16__10.md,2024-11-16,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:السبت; recurrence:mode=2024-11-16x2
+2024-11-17__11,2024-11-17__11.md,2024-11-17,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاحد; recurrence:mode=2024-06-12x9
+2024-11-18__12,2024-11-18__12.md,2024-11-18,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاثنين; recurrence:mode=2024-11-18x10
+2024-11-19__13,2024-11-19__13.md,2024-11-19,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2024-11-20__14,2024-11-20__14.md,2024-11-20,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2024-11-20x10
+2024-11-21__15,2024-11-21__15.md,2024-11-21,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الخميس; recurrence:mode=2024-11-21x2
+2024-11-25__17,2024-11-25__17.md,2024-11-25,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الاثنين; recurrence:mode=2025-12-31x15
+2024-11-26__18,2024-11-26__18.md,2024-11-26,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الثلاثاء; recurrence:mode=2024-11-26x25
+2024-11-27__19,2024-11-27__19.md,2024-11-27,filename,pass,na,pass,na,pass,pass,4,0,confirmed,,weekday:الاربعاء; recurrence:mode=2024-11-27x52
+2024-11-28__20,2024-11-28__20.md,2024-11-28,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الخميس; recurrence:mode=2024-11-11x6
+2024-11-29__21,2024-11-29__21.md,2024-11-29,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2024-11-30__22,2024-11-30__22.md,2024-11-30,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:السبت
+2024-12-01__23,2024-12-01__23.md,2024-12-01,filename,na,na,na,na,pass,pass,2,0,confirmed,,
+2024-12-02__24,2024-12-02__24.md,2024-12-02,filename,na,na,na,na,pass,pass,2,0,confirmed,,
+2024-12-03__25,2024-12-03__25.md,2024-12-03,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الثلاثاء
+2024-12-09__27,2024-12-09__27.md,2024-12-09,filename,na,na,na,na,pass,pass,2,0,confirmed,,
+2024-12-09__28,2024-12-09__28.md,2024-12-09,filename,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الخميس
+2024-12-20__29,2024-12-20__29.md,2024-12-20,filename,pass,na,na,na,pass,pass,3,0,confirmed,,weekday:الجمعه
+2024-12-25__N30,2024-12-25__N30.md,2024-12-25,multiday_first_day_min,na,na,na,na,na,pass,1,0,single_witness,,
+2024-12-31__31,2024-12-31__31.md,2024-12-31,filename,fail,na,na,na,pass,pass,2,1,soft_flag,,weekday:الجمعه
+2025-01-07__N32,2025-01-07__N32.md,2025-01-07,multiday_first_day_min,pass,na,na,na,na,pass,2,0,confirmed,,weekday:الثلاثاء
+2025-06-20__26,2025-06-20__26.md,2025-06-20,filename_or_banner,na,na,na,na,fail,pass,1,1,conflict,,
